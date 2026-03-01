@@ -403,7 +403,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.36 [VERIFY] Quality checkpoint: terraform validate batch 3
+- [x] 1.36 [VERIFY] Quality checkpoint: terraform validate batch 3
   - **Do**: Validate both repos after batch 3 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
