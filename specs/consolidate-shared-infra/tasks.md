@@ -43,7 +43,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - locals.tf, variables.tf_
 
-- [ ] 1.4 [VERIFY] Quality checkpoint: terraform fmt + validate foundation
+- [x] 1.4 [VERIFY] Quality checkpoint: terraform fmt + validate foundation
   - **Do**: Run formatting and basic validation on the foundation files
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && echo PASS`
@@ -53,7 +53,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Copy Modules from yt-summarizer (Tasks 1.5 - 1.9)
 
-- [ ] 1.5 Copy AKS module from yt-summarizer
+- [x] 1.5 Copy AKS module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/aks/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/aks/main.tf` exactly as-is
