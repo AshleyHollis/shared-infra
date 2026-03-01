@@ -685,7 +685,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-12, AC-6.4, AC-7.2_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.62 Replace meal-planner hardcoded references with shared module
+- [x] 1.62 Replace meal-planner hardcoded references with shared module
   - **Do**:
     1. In `../meal-planner/infra/terraform/key-vault-secrets.tf`, replace `data.azurerm_resource_group.shared` and `data.azurerm_key_vault.shared` with `module.shared` references
     2. In `../meal-planner/infra/terraform/swa.tf`, replace `data.azurerm_resource_group.shared.name` with `module.shared.resource_group_name`
