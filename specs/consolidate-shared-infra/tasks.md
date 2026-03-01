@@ -512,7 +512,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-11.5_
   - _Design: Section 4 - actionlint.yml_
 
-- [ ] 1.46 [VERIFY] Quality checkpoint: actionlint on workflows
+- [x] 1.46 [VERIFY] Quality checkpoint: actionlint on workflows
   - **Do**: Validate all workflow YAML files
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint .github/workflows/*.yml && echo PASS || (for f in .github/workflows/*.yml; do python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || echo "INVALID: $f"; done && echo YAML_CHECK_DONE)`
