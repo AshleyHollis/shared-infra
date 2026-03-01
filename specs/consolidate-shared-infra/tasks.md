@@ -777,7 +777,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Versioning + Release Setup (Tasks 1.71 - 1.74)
 
-- [ ] 1.71 Create CHANGELOG.md for initial release
+- [x] 1.71 Create CHANGELOG.md for initial release
   - **Do**:
     1. Create `CHANGELOG.md` documenting v1.0.0 initial release
     2. List: 53 composite actions consolidated, 6 workflows, TF root module, data-only consumer module
