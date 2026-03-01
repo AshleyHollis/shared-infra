@@ -4,7 +4,7 @@ inputs:
   terraform-version:
     description: 'Terraform version to install'
     required: false
-    default: '1.5.7'
+    default: '1.12'
   azure-client-id:
     description: 'Azure client ID for OIDC authentication'
     required: true
