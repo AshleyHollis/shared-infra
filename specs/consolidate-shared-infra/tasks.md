@@ -31,7 +31,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-2, AC-1.2, AC-3.2, AC-3.3_
   - _Design: Section 1 - backend.tf, versions.tf_
 
-- [ ] 1.3 Create TF locals.tf, variables.tf, terraform.auto.tfvars
+- [x] 1.3 Create TF locals.tf, variables.tf, terraform.auto.tfvars
   - **Do**:
     1. Create `terraform/locals.tf` with `name_prefix = "ytsumm-prd"` and `common_tags` map
     2. Create `terraform/variables.tf` with subscription_id, location, kubernetes_version, aks_node_size, aks_os_disk_size_gb, acr_sku, key_vault_secrets_officer_principal_id (all with defaults per design.md)
