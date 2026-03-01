@@ -533,7 +533,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Reusable Workflows (Tasks 1.48 - 1.52)
 
-- [ ] 1.48 Create terraform-reusable.yml workflow
+- [x] 1.48 Create terraform-reusable.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-reusable.yml` with `workflow_call` trigger
     2. Accept inputs: working_directory, environment
