@@ -75,7 +75,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/container-registry_
 
-- [ ] 1.7 Copy github-oidc module from yt-summarizer
+- [x] 1.7 Copy github-oidc module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/github-oidc/` directory
     2. Copy `main.tf`, `outputs.tf`, `variables.tf` from `../yt-summarizer/infra/terraform/modules/github-oidc/`
