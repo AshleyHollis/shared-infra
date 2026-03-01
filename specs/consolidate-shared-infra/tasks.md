@@ -789,7 +789,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-10.5_
   - _Design: Versioning Strategy_
 
-- [ ] 1.72 Create v1.0.0 git tag and v1 major tag
+- [x] 1.72 Create v1.0.0 git tag and v1 major tag
   - **Do**:
     1. Create annotated tag `v1.0.0`: `git tag -a v1.0.0 -m "v1.0.0: Initial shared-infra release"`
     2. Create mutable major tag `v1` pointing to same commit: `git tag -f v1 v1.0.0`
