@@ -520,7 +520,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(ci): pass workflow quality checkpoint` (only if fixes needed)
   - _Requirements: AC-11.1, AC-11.3, AC-11.4, AC-11.5_
 
-- [ ] 1.47 Set shared-infra repo to public visibility
+- [x] 1.47 Set shared-infra repo to public visibility
   - **Do**:
     1. Run `gh repo edit AshleyHollis/shared-infra --visibility public`
     2. Verify the repo is now public
