@@ -155,7 +155,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - key-vault.tf_
 
-- [ ] 1.14 Create github-oidc.tf with OIDC module call
+- [x] 1.14 Create github-oidc.tf with OIDC module call
   - **Do**:
     1. Create `terraform/github-oidc.tf` with `module.github_oidc` call exactly matching design.md
     2. Set `github_repository = "shared-infra"`, `assign_contributor_role = true`, `acr_id = module.acr.id`
