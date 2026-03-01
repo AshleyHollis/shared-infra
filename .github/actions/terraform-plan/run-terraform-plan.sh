@@ -16,14 +16,18 @@
 
 set -eo pipefail
 
-terraform plan -no-color -input=false -out=tfplan \
-  -var="subscription_id=${SUBSCRIPTION_ID}" \
-  -var="sql_admin_password=${SQL_ADMIN_PASSWORD}" \
-  -var="openai_api_key=${OPENAI_API_KEY}" \
-  -var="cloudflare_api_token=${CLOUDFLARE_API_TOKEN}" \
-  -var="auth0_domain=${AUTH0_DOMAIN:-}" \
-  -var="auth0_terraform_client_id=${AUTH0_CLIENT_ID:-}" \
-  2>&1 | tee plan_output.raw.txt
+# Build terraform plan args - only pass optional vars when set
+TF_ARGS=(-no-color -input=false -out=tfplan)
+TF_ARGS+=(-var="subscription_id=${SUBSCRIPTION_ID}")
+TF_ARGS+=(-var="sql_admin_password=${SQL_ADMIN_PASSWORD}")
+
+# Optional vars - only pass if non-empty to avoid "undeclared variable" errors
+[[ -n "$OPENAI_API_KEY" ]]      && TF_ARGS+=(-var="openai_api_key=${OPENAI_API_KEY}")
+[[ -n "$CLOUDFLARE_API_TOKEN" ]] && TF_ARGS+=(-var="cloudflare_api_token=${CLOUDFLARE_API_TOKEN}")
+[[ -n "$AUTH0_DOMAIN" ]]         && TF_ARGS+=(-var="auth0_domain=${AUTH0_DOMAIN}")
+[[ -n "$AUTH0_CLIENT_ID" ]]      && TF_ARGS+=(-var="auth0_terraform_client_id=${AUTH0_CLIENT_ID}")
+
+terraform plan "${TF_ARGS[@]}" 2>&1 | tee plan_output.raw.txt
 
 PLAN_EXIT_CODE=$?
 
