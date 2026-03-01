@@ -421,7 +421,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Data-Only Consumer Module (Tasks 1.38 - 1.42)
 
-- [ ] 1.38 Create shared-infra-data consumer module: main.tf
+- [x] 1.38 Create shared-infra-data consumer module: main.tf
   - **Do**:
     1. Create `terraform/modules/shared-infra-data/main.tf` with `data.terraform_remote_state.shared_infra` block
     2. Backend config: resource_group_name `rg-ytsummarizer-tfstate`, storage_account_name `stytsummarizertfstate`, container_name `tfstate`, key `shared-infra.tfstate`, use_oidc true
