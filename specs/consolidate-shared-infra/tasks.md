@@ -500,7 +500,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-8, AC-11.3, AC-11.6_
   - _Design: Section 4 - terraform-apply.yml_
 
-- [ ] 1.45 Create actionlint.yml workflow
+- [x] 1.45 Create actionlint.yml workflow
   - **Do**:
     1. Create `.github/workflows/actionlint.yml` that runs actionlint on PR
     2. Triggers on PR to main, paths: `.github/**`
