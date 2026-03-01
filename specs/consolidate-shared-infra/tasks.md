@@ -546,7 +546,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-7, AC-9.1, AC-9.2, AC-9.3, AC-9.4_
   - _Design: Section 4 - terraform-reusable.yml_
 
-- [ ] 1.49 Create build-and-push.yml reusable workflow
+- [x] 1.49 Create build-and-push.yml reusable workflow
   - **Do**:
     1. Create `.github/workflows/build-and-push.yml` with `workflow_call` trigger
     2. Accept inputs: image_name, dockerfile_path, build_context
