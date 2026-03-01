@@ -6,7 +6,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Bootstrap + Foundation (Tasks 1.1 - 1.4)
 
-- [ ] 1.1 Create bootstrap backend script
+- [x] 1.1 Create bootstrap backend script
   - **Do**:
     1. Create `scripts/bootstrap-backend.sh` that verifies the Azure Storage Account and container exist for shared-infra state
     2. Script uses `az storage account show` and `az storage container show` to validate
