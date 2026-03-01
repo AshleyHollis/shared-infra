@@ -1,0 +1,82 @@
+# Reusable Deploy to AKS Workflow
+# Deploys applications to the shared AKS cluster via ArgoCD
+# Called by consumer repos (yt-summarizer, meal-planner) via workflow_call
+
+name: Deploy to AKS
+
+on:
+  workflow_call:
+    inputs:
+      cluster_name:
+        description: 'Name of the AKS cluster'
+        required: true
+        type: string
+      resource_group:
+        description: 'Azure resource group containing the AKS cluster'
+        required: true
+        type: string
+      namespace:
+        description: 'Kubernetes namespace to deploy into'
+        required: true
+        type: string
+      image_tag:
+        description: 'Full image tag to deploy (e.g., acrytsummprd.azurecr.io/app:sha)'
+        required: true
+        type: string
+
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to AKS
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get AKS credentials
+        shell: bash
+        run: |
+          az aks get-credentials \
+            --resource-group ${{ inputs.resource_group }} \
+            --name ${{ inputs.cluster_name }} \
+            --overwrite-existing
+
+      - name: Create namespace if not exists
+        shell: bash
+        run: |
+          kubectl create namespace ${{ inputs.namespace }} --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy via ArgoCD sync
+        shell: bash
+        run: |
+          # Update image tag in deployment manifests
+          kubectl set image deployment/${{ inputs.namespace }} \
+            app=${{ inputs.image_tag }} \
+            --namespace ${{ inputs.namespace }} || true
+
+          # Apply manifests from k8s directory if present
+          if [ -d "k8s/" ]; then
+            kubectl apply -f k8s/ --namespace ${{ inputs.namespace }}
+          fi
+
+          # Wait for rollout to complete
+          kubectl rollout status deployment/${{ inputs.namespace }} \
+            --namespace ${{ inputs.namespace }} \
+            --timeout=300s

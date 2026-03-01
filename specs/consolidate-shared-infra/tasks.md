@@ -558,7 +558,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-7, AC-9.1, AC-9.2_
   - _Design: Section 4 - build-and-push.yml_
 
-- [ ] 1.50 Create deploy-to-aks.yml reusable workflow
+- [x] 1.50 Create deploy-to-aks.yml reusable workflow
   - **Do**:
     1. Create `.github/workflows/deploy-to-aks.yml` with `workflow_call` trigger
     2. Accept inputs: cluster_name, resource_group, namespace, image_tag
