@@ -674,7 +674,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Consumer Updates - meal-planner (Tasks 1.61 - 1.66)
 
-- [ ] 1.61 Add shared-infra-data module reference to meal-planner
+- [x] 1.61 Add shared-infra-data module reference to meal-planner
   - **Do**:
     1. Create `../meal-planner/infra/terraform/shared.tf` with `module "shared"` block
     2. Source: `git::https://github.com/AshleyHollis/shared-infra.git//terraform/modules/shared-infra-data?ref=v1`
