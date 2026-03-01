@@ -456,7 +456,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-5, AC-6.1_
   - _Design: Section 2 - File tree shows variables.tf in shared-infra-data_
 
-- [ ] 1.41 [VERIFY] Quality checkpoint: validate consumer module
+- [x] 1.41 [VERIFY] Quality checkpoint: validate consumer module
   - **Do**: Validate the shared-infra-data module in isolation
   - **Files**: None (verification only)
   - **Verify**: `cd terraform/modules/shared-infra-data && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check && echo PASS`
