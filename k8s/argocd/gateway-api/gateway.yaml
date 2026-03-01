@@ -1,0 +1,51 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: main-gateway
+  namespace: gateway-system
+  labels:
+    app.kubernetes.io/name: shared-infra
+    app.kubernetes.io/component: gateway
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "*.yt-summarizer.apps.ashleyhollis.com,*.meal-planner.apps.ashleyhollis.com"
+spec:
+  gatewayClassName: nginx
+  listeners:
+    - name: https-yt-summarizer
+      port: 443
+      protocol: HTTPS
+      hostname: "*.yt-summarizer.apps.ashleyhollis.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: yt-summarizer-wildcard-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: http-yt-summarizer
+      port: 80
+      protocol: HTTP
+      hostname: "*.yt-summarizer.apps.ashleyhollis.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-meal-planner
+      port: 443
+      protocol: HTTPS
+      hostname: "*.meal-planner.apps.ashleyhollis.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: meal-planner-wildcard-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: http-meal-planner
+      port: 80
+      protocol: HTTP
+      hostname: "*.meal-planner.apps.ashleyhollis.com"
+      allowedRoutes:
+        namespaces:
+          from: All
