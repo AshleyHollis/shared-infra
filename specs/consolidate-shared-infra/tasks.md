@@ -64,7 +64,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/aks_
 
-- [ ] 1.6 Copy container-registry module from yt-summarizer
+- [x] 1.6 Copy container-registry module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/container-registry/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/container-registry/main.tf`
