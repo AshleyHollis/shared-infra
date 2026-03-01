@@ -247,6 +247,20 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: gateway-system
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      jsonPointers:
+        - /status
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jsonPointers:
+        - /status
+        - /spec/data/0/remoteRef/conversionStrategy
+        - /spec/data/0/remoteRef/decodingStrategy
+        - /spec/data/0/remoteRef/metadataPolicy
+        - /spec/target/creationPolicy
+        - /spec/target/deletionPolicy
   syncPolicy:
     automated:
       prune: true
@@ -254,6 +268,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
 
 ---
 # -----------------------------------------------------------------------------

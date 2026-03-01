@@ -26,13 +26,13 @@ spec:
           args:
             - --source=gateway-httproute
             - --provider=cloudflare
-            - --domain-filter=apps.ashleyhollis.com
+            - --domain-filter=ashleyhollis.com
             - --policy=sync
             - --registry=txt
             - --txt-owner-id=yt-summarizer-aks
             - --txt-prefix=_externaldns-
             - --interval=30s
-            - --log-level=debug
+            - --log-level=info
             - --log-format=text
           env:
             - name: CF_API_TOKEN
