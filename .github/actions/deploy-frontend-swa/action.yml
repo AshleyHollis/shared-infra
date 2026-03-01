@@ -48,7 +48,7 @@ inputs:
 outputs:
   static_web_app_url:
     description: Deployed Static Web App URL
-    value: ${{ steps.deploy.outputs.static_web_app_url || steps.retry-1.outputs.static_web_app_url || steps.retry-2.outputs.static_web_app_url }}
+    value: ${{ steps.deploy.outputs.static_web_app_url }}
 runs:
   using: composite
   steps:
@@ -87,6 +87,10 @@ runs:
         bash scripts/workflows/write-runtime-config.sh \
           "${{ inputs.runtime-config-path }}" \
           "${{ inputs.api-url }}"
+        # Also copy into standalone/public so it's available in hybrid mode
+        if [[ -d "${{ inputs.app-location }}/.next/standalone/public" ]]; then
+          cp "${{ inputs.runtime-config-path }}" "${{ inputs.app-location }}/.next/standalone/public/runtime-config.js"
+        fi
 
     # Deploy with retry logic using wrapper script with per-attempt timeout
     # Timeout strategy:
@@ -104,5 +108,5 @@ runs:
         MAX_ATTEMPTS: "3"
         TIMEOUT_SECONDS: "1200" # Final attempt timeout (attempts 1-2 use 300s)
       run: |
-        chmod +x .github/actions/deploy-frontend-swa/deploy-with-retry.sh
-        .github/actions/deploy-frontend-swa/deploy-with-retry.sh
+        chmod +x ${{ github.action_path }}/deploy-with-retry.sh
+        ${{ github.action_path }}/deploy-with-retry.sh
