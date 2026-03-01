@@ -18,8 +18,9 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: yt-summarizer-wildcard-tls
+          - group: ""
             kind: Secret
+            name: yt-summarizer-wildcard-tls
       allowedRoutes:
         namespaces:
           from: All
@@ -37,8 +38,9 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: meal-planner-wildcard-tls
+          - group: ""
             kind: Secret
+            name: meal-planner-wildcard-tls
       allowedRoutes:
         namespaces:
           from: All
