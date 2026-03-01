@@ -578,7 +578,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(workflows): pass quality checkpoint` (only if fixes needed)
   - _Requirements: FR-7, AC-9.1, AC-9.5_
 
-- [ ] 1.52 [VERIFY] Quality checkpoint: reusable workflow inputs/outputs
+- [x] 1.52 [VERIFY] Quality checkpoint: reusable workflow inputs/outputs
   - **Do**: Verify reusable workflows accept required inputs per design.md
   - **Files**: None (verification only)
   - **Verify**: `grep -q 'working_directory\|working-directory' .github/workflows/terraform-reusable.yml && grep -q 'image_name\|image-name' .github/workflows/build-and-push.yml && grep -q 'cluster_name\|cluster-name' .github/workflows/deploy-to-aks.yml && echo PASS`
