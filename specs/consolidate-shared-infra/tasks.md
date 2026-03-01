@@ -622,7 +622,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-12, AC-6.4, AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer_
 
-- [ ] 1.56 Remove yt-summarizer ArgoCD module (moves to shared-infra)
+- [x] 1.56 Remove yt-summarizer ArgoCD module (moves to shared-infra)
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/argocd.tf`, add removed block for the ArgoCD module resources
     2. Set `lifecycle { destroy = false }` on each removed block
