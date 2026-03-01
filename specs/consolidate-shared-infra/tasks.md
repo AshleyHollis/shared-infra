@@ -633,7 +633,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-5.1_
   - _Design: Consumer Update Design - ArgoCD handling_
 
-- [ ] 1.57 Remove yt-summarizer helm/kubernetes providers and AKS-related variables
+- [x] 1.57 Remove yt-summarizer helm/kubernetes providers and AKS-related variables
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/providers.tf`, remove helm and kubernetes provider blocks (no longer needed without AKS)
     2. In `../yt-summarizer/infra/terraform/environments/prod/versions.tf`, remove helm and kubernetes from required_providers, bump to `>= 1.7.0`
