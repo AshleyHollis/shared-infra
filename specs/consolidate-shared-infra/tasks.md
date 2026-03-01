@@ -759,7 +759,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.6_
   - _Design: Consumer Update Design - Consumer Action Updates_
 
-- [ ] 1.69 [VERIFY] Quality checkpoint: actionlint on consumer workflows
+- [x] 1.69 [VERIFY] Quality checkpoint: actionlint on consumer workflows
   - **Do**: Validate all workflow files in both consumer repos
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint ../yt-summarizer/.github/workflows/*.yml && actionlint ../meal-planner/.github/workflows/*.yml && echo PASS || echo ACTIONLINT_NOT_AVAILABLE`
