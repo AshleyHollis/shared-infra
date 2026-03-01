@@ -1,11 +1,17 @@
-data "terraform_remote_state" "shared_infra" {
-  backend = "azurerm"
-
-  config = {
-    resource_group_name  = "rg-ytsummarizer-tfstate"
-    storage_account_name = "stytsummarizertfstate"
-    container_name       = "tfstate"
-    key                  = "shared-infra.tfstate"
-    use_oidc             = true
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.0"
+    }
   }
+}
+
+data "azurerm_resource_group" "shared" {
+  name = var.resource_group_name
+}
+
+data "azurerm_key_vault" "shared" {
+  name                = var.key_vault_name
+  resource_group_name = var.resource_group_name
 }
