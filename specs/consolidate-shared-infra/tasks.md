@@ -767,7 +767,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(consumers): pass workflow quality checkpoint` (only if fixes needed)
   - _Requirements: AC-8.6_
 
-- [ ] 1.70 [VERIFY] Quality checkpoint: all consumer action refs use @v1
+- [x] 1.70 [VERIFY] Quality checkpoint: all consumer action refs use @v1
   - **Do**: Verify both consumer repos reference shared-infra actions with @v1
   - **Files**: None (verification only)
   - **Verify**: `grep -r 'AshleyHollis/shared-infra/.github/actions/' ../yt-summarizer/.github/workflows/ | grep -c '@v1' | awk '{if($1>0) print "YT_REFS_PASS"}' && grep -r 'AshleyHollis/shared-infra/.github/actions/' ../meal-planner/.github/workflows/ | grep -c '@v1' | awk '{if($1>0) print "MP_REFS_PASS"}'`
