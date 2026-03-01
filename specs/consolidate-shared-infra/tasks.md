@@ -357,7 +357,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.32 [VERIFY] Quality checkpoint: terraform validate batch 2
+- [x] 1.32 [VERIFY] Quality checkpoint: terraform validate batch 2
   - **Do**: Validate both repos after batch 2 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
@@ -367,7 +367,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 3: AKS + Workload Identity (Tasks 1.33 - 1.37)
 
-- [ ] 1.33 Backup state before batch 3 migration
+- [x] 1.33 Backup state before batch 3 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch3.tfstate`
     2. Verify backup file is non-empty
