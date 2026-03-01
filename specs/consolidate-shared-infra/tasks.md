@@ -697,7 +697,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2, AC-7.4_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.63 Update meal-planner storage.tf to use shared module
+- [x] 1.63 Update meal-planner storage.tf to use shared module
   - **Do**:
     1. In `../meal-planner/infra/terraform/storage.tf`, replace `data.azurerm_resource_group.shared` with `module.shared` references
   - **Files**: `../meal-planner/infra/terraform/storage.tf`
