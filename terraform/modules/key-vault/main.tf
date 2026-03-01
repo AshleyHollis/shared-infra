@@ -97,6 +97,10 @@ resource "azurerm_key_vault" "vault" {
   rbac_authorization_enabled = var.enable_rbac_authorization # Renamed from enable_rbac_authorization in azurerm 4.x
 
   tags = var.tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # Grant a specific principal access to manage secrets (optional)

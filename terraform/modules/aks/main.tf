@@ -138,6 +138,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   # Ignore Azure-managed attributes that would cause cluster replacement
   lifecycle {
+    prevent_destroy = true
     ignore_changes = [
       # Azure-managed add-ons and features
       azure_policy_enabled,

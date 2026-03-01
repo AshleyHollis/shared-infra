@@ -801,7 +801,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-9, AC-10.1, AC-10.2, AC-10.3, AC-10.4_
   - _Design: Versioning Strategy_
 
-- [ ] 1.73 [VERIFY] Full shared-infra validation checkpoint
+- [x] 1.73 [VERIFY] Full shared-infra validation checkpoint
   - **Do**: Comprehensive validation of entire shared-infra repo
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo TF_PASS; ls -d ../.github/actions/*/action.yml | wc -l | grep -q '53' && echo ACTIONS_PASS; which actionlint > /dev/null 2>&1 && actionlint ../.github/workflows/*.yml && echo WORKFLOWS_PASS || echo ACTIONLINT_SKIP`
@@ -809,7 +809,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(shared-infra): pass comprehensive validation` (only if fixes needed)
   - _Requirements: FR-1, FR-6, FR-7, AC-3.1, AC-8.1, AC-9.1_
 
-- [ ] 1.74 [VERIFY] Verify v1 tag is accessible for consumer repos
+- [x] 1.74 [VERIFY] Verify v1 tag is accessible for consumer repos
   - **Do**: Verify the v1 tag exists on remote and can be referenced
   - **Files**: None (verification only)
   - **Verify**: `git ls-remote --tags origin | grep -q 'refs/tags/v1$' && git ls-remote --tags origin | grep -q 'refs/tags/v1.0.0' && echo REMOTE_TAGS_PASS`
@@ -821,7 +821,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
 
-- [ ] 2.1 Cross-repo terraform validate: shared-infra
+- [x] 2.1 Cross-repo terraform validate: shared-infra
   - **Do**:
     1. Run terraform init (backend=false) and validate in shared-infra
     2. Verify all import blocks reference valid resource addresses
@@ -832,7 +832,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-3.5, AC-3.7_
 
-- [ ] 2.2 Cross-repo terraform validate: yt-summarizer
+- [x] 2.2 Cross-repo terraform validate: yt-summarizer
   - **Do**:
     1. Run terraform init (backend=false) and validate in yt-summarizer
     2. Verify removed blocks are present for all migrated resources
@@ -843,7 +843,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-5.4, AC-5.7_
 
-- [ ] 2.3 Cross-repo terraform validate: meal-planner
+- [x] 2.3 Cross-repo terraform validate: meal-planner
   - **Do**:
     1. Run terraform init (backend=false) and validate in meal-planner
     2. Verify no references to yt-summarizer state remain
@@ -854,7 +854,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-7.3, AC-7.4_
 
-- [ ] 2.4 Verify meal-planner decoupling from yt-summarizer
+- [x] 2.4 Verify meal-planner decoupling from yt-summarizer
   - **Do**:
     1. Grep meal-planner TF files for any remaining yt-summarizer references
     2. Verify no `data.terraform_remote_state` pointing to yt-summarizer's prod.tfstate
@@ -865,7 +865,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-7.4_
 
-- [ ] 2.5 Verify no sensitive values in shared-infra outputs
+- [x] 2.5 Verify no sensitive values in shared-infra outputs
   - **Do**:
     1. Check `terraform/outputs.tf` for any `sensitive = true` attributes
     2. Verify no passwords, keys, or connection strings in output values
@@ -876,7 +876,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-4.2, NFR-4_
 
-- [ ] 2.6 Verify prevent_destroy on critical resources
+- [x] 2.6 Verify prevent_destroy on critical resources
   - **Do**:
     1. Check main.tf, aks.tf, acr.tf, key-vault.tf for `prevent_destroy = true` lifecycle
     2. Verify all 4 critical resources are protected
@@ -886,7 +886,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-4, AC-3.6_
 
-- [ ] 2.7 Verify blob versioning in bootstrap script
+- [x] 2.7 Verify blob versioning in bootstrap script
   - **Do**:
     1. Check bootstrap script includes `enable-versioning` command
     2. Verify rollback capability is documented
@@ -896,7 +896,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-1.3, NFR-7_
 
-- [ ] 2.8 Verify .terraform.lock.hcl is committed
+- [x] 2.8 Verify .terraform.lock.hcl is committed
   - **Do**:
     1. Verify lock file is tracked in git
     2. Verify it contains expected provider hashes
@@ -906,7 +906,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-14, AC-3.4_
 
-- [ ] 2.9 Verify repo visibility is public
+- [x] 2.9 Verify repo visibility is public
   - **Do**:
     1. Check repo visibility via gh CLI
   - **Files**: None (read-only verification)
@@ -915,7 +915,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-13, AC-8.5_
 
-- [ ] 2.10 [VERIFY] Integration test: all 3 repos validate together
+- [x] 2.10 [VERIFY] Integration test: all 3 repos validate together
   - **Do**: Run validation across all 3 repos in sequence
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../../../../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo ALL_THREE_PASS`
@@ -927,7 +927,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
 
 Focus: Full local CI suite, comprehensive checks.
 
-- [ ] 3.1 [VERIFY] Terraform format check (all repos)
+- [x] 3.1 [VERIFY] Terraform format check (all repos)
   - **Do**: Run terraform fmt -check across all modified Terraform directories
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && cd ../../yt-summarizer/infra/terraform && terraform fmt -check -recursive && cd ../../../meal-planner/infra/terraform && terraform fmt -check -recursive && echo FMT_PASS`
@@ -935,7 +935,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `style(terraform): fix formatting` (only if fixes needed)
   - _Requirements: AC-11.4_
 
-- [ ] 3.2 [VERIFY] Terraform validate (all repos)
+- [x] 3.2 [VERIFY] Terraform validate (all repos)
   - **Do**: Run terraform validate across all modified Terraform directories
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../../../../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo VALIDATE_PASS`
@@ -943,7 +943,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(terraform): resolve validation errors` (only if fixes needed)
   - _Requirements: AC-3.5, AC-5.3, AC-7.3_
 
-- [ ] 3.3 [VERIFY] Action metadata completeness
+- [x] 3.3 [VERIFY] Action metadata completeness
   - **Do**: Verify all 53 actions have required metadata fields
   - **Files**: None (verification only)
   - **Verify**: `count=0; for f in .github/actions/*/action.yml; do if grep -q "^name:" "$f" && grep -q "^description:" "$f"; then count=$((count+1)); else echo "MISSING: $f"; fi; done; echo "$count actions verified" && test "$count" -eq 53 && echo METADATA_PASS`
@@ -951,7 +951,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(actions): add missing metadata` (only if fixes needed)
   - _Requirements: AC-8.3_
 
-- [ ] 3.4 [VERIFY] Workflow validation
+- [x] 3.4 [VERIFY] Workflow validation
   - **Do**: Validate all 6 workflow files for correct YAML structure and required fields
   - **Files**: None (verification only)
   - **Verify**: `for f in .github/workflows/*.yml; do python3 -c "import yaml; y=yaml.safe_load(open('$f')); assert 'on' in y or True in y, f'missing trigger: $f'" 2>&1 || echo "INVALID: $f"; done && echo WORKFLOW_YAML_PASS`
@@ -959,7 +959,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(workflows): resolve validation issues` (only if fixes needed)
   - _Requirements: AC-9.1, AC-11.1_
 
-- [ ] 3.5 [VERIFY] Full local CI: fmt + validate + actionlint
+- [x] 3.5 [VERIFY] Full local CI: fmt + validate + actionlint
   - **Do**: Run complete local CI suite
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo TF_PASS; which actionlint > /dev/null 2>&1 && actionlint .github/workflows/*.yml && echo ACTIONLINT_PASS || echo ACTIONLINT_SKIP; echo LOCAL_CI_COMPLETE`
@@ -967,7 +967,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `chore(quality): pass full local CI` (only if fixes needed)
   - _Requirements: AC-11.4, AC-11.5_
 
-- [ ] 3.6 [VERIFY] AC checklist verification
+- [x] 3.6 [VERIFY] AC checklist verification
   - **Do**: Programmatically verify each acceptance criterion is satisfied
   - **Files**: None (verification only)
   - **Verify**: Run the following checks:
@@ -999,7 +999,7 @@ Focus: Full local CI suite, comprehensive checks.
 
 Focus: Create PR, CI monitoring, final validation.
 
-- [ ] 4.1 Create PR for shared-infra consolidation
+- [x] 4.1 Create PR for shared-infra consolidation
   - **Do**:
     1. Verify current branch is a feature branch: `git branch --show-current`
     2. If on main, STOP and alert (should not happen)
