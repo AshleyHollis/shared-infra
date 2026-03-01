@@ -378,7 +378,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.34 Add import blocks for AKS and Workload Identity in shared-infra
+- [x] 1.34 Add import blocks for AKS and Workload Identity in shared-infra
   - **Do**:
     1. Add import block to `terraform/aks.tf` for `module.aks.azurerm_kubernetes_cluster.aks`
     2. Add import block to `terraform/workload-identity.tf` for `azurerm_user_assigned_identity.external_secrets`

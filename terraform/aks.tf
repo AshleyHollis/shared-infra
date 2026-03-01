@@ -1,3 +1,8 @@
+import {
+  to = module.aks.azurerm_kubernetes_cluster.aks
+  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.ContainerService/managedClusters/aks-ytsumm-prd"
+}
+
 module "aks" {
   source = "./modules/aks"
 
@@ -15,8 +20,4 @@ module "aks" {
   enable_workload_identity = true
 
   tags = local.common_tags
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
