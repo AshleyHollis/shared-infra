@@ -32,7 +32,7 @@ spec:
             - --txt-owner-id=yt-summarizer-aks
             - --txt-prefix=_externaldns-
             - --interval=30s
-            - --log-level=info
+            - --log-level=debug
             - --log-format=text
           env:
             - name: CF_API_TOKEN
