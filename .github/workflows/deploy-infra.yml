@@ -47,34 +47,59 @@ jobs:
           kubectl apply -f k8s/argocd/infra-apps.yaml
           echo "✓ Infrastructure applications applied"
 
-      - name: Verify ArgoCD applications exist
+      - name: Force refresh OutOfSync applications
         run: |
-          echo "Waiting 10s for ArgoCD to register applications..."
-          sleep 10
+          APPS=(gateway-api certificates external-dns cert-manager external-secrets
+                cert-manager-clusterissuers eso-cluster-secretstore ingress-nginx)
 
-          echo ""
+          for app in "${APPS[@]}"; do
+            if kubectl get application "$app" -n argocd &>/dev/null; then
+              SYNC=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null)
+              if [[ "$SYNC" != "Synced" ]]; then
+                echo "Forcing hard refresh on $app (status: $SYNC)..."
+                kubectl annotate application "$app" -n argocd \
+                  argocd.argoproj.io/refresh=hard --overwrite
+              fi
+            fi
+          done
+
+      - name: Wait for sync convergence
+        run: |
+          echo "Waiting 30s for ArgoCD to sync..."
+          sleep 30
+
+      - name: Verify ArgoCD applications
+        run: |
           echo "=== ArgoCD Infrastructure Applications ==="
           kubectl get applications -n argocd -o custom-columns=\
-          'NAME:.metadata.name,SYNC:.status.sync.status,HEALTH:.status.health.status,REPO:.spec.source.repoURL' \
+          'NAME:.metadata.name,SYNC:.status.sync.status,HEALTH:.status.health.status' \
           2>/dev/null || echo "Warning: Could not list applications"
 
           echo ""
-          echo "=== Checking key applications ==="
+          echo "=== Key Application Status ==="
           APPS=(gateway-api certificates external-dns cert-manager external-secrets)
-          ALL_FOUND=true
+          FAILED=false
 
           for app in "${APPS[@]}"; do
             if kubectl get application "$app" -n argocd &>/dev/null; then
               SYNC=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
               HEALTH=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
               echo "✓ $app (sync: $SYNC, health: $HEALTH)"
+
+              if [[ "$SYNC" != "Synced" ]]; then
+                echo "  Sync conditions:"
+                kubectl get application "$app" -n argocd \
+                  -o jsonpath='{.status.conditions[*].message}' 2>/dev/null || true
+                echo ""
+                FAILED=true
+              fi
             else
               echo "✗ $app NOT FOUND"
-              ALL_FOUND=false
+              FAILED=true
             fi
           done
 
-          if [[ "$ALL_FOUND" != "true" ]]; then
+          if [[ "$FAILED" == "true" ]]; then
             echo ""
-            echo "::warning::Some infrastructure applications were not found. They may still be creating."
+            echo "::warning::Some applications are not fully synced. Check ArgoCD for details."
           fi
