@@ -119,7 +119,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - main.tf_
 
-- [ ] 1.11 Create aks.tf with AKS module call
+- [x] 1.11 Create aks.tf with AKS module call
   - **Do**:
     1. Create `terraform/aks.tf` with `module.aks` call exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
