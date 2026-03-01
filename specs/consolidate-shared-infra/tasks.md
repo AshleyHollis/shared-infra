@@ -202,7 +202,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-10, AC-4.1, AC-4.2, AC-4.3_
   - _Design: Section 1 - outputs.tf_
 
-- [ ] 1.18 [VERIFY] Quality checkpoint: full terraform validate with outputs
+- [x] 1.18 [VERIFY] Quality checkpoint: full terraform validate with outputs
   - **Do**: Re-validate entire root module after adding outputs
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -210,7 +210,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(terraform): pass quality checkpoint` (only if fixes needed)
   - _Requirements: FR-1, FR-10, AC-4.1_
 
-- [ ] 1.19 Commit .terraform.lock.hcl after terraform init
+- [x] 1.19 Commit .terraform.lock.hcl after terraform init
   - **Do**:
     1. Run `cd terraform && terraform init -backend=false` to generate `.terraform.lock.hcl`
     2. Verify lock file was created and contains provider hashes for azurerm and azuread
