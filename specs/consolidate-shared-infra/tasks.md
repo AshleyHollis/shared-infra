@@ -345,7 +345,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.31 Add removed blocks for Key Vault and ACR in yt-summarizer
+- [x] 1.31 Add removed blocks for Key Vault and ACR in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/key-vault.tf`, add removed blocks for `module.key_vault.azurerm_key_vault.vault` and `module.key_vault.azurerm_role_assignment.secrets_officer[0]`
     2. In `../yt-summarizer/infra/terraform/environments/prod/acr.tf`, add removed block for `module.acr.azurerm_container_registry.acr`
