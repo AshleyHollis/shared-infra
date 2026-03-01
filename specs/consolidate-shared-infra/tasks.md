@@ -143,7 +143,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - acr.tf_
 
-- [ ] 1.13 Create key-vault.tf with Key Vault module call
+- [x] 1.13 Create key-vault.tf with Key Vault module call
   - **Do**:
     1. Create `terraform/key-vault.tf` with `module.key_vault` call exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
