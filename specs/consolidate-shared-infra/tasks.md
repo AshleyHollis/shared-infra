@@ -166,7 +166,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-2.1, AC-3.1_
   - _Design: Section 5 - OIDC Authentication_
 
-- [ ] 1.15 Create workload-identity.tf with managed identity resources
+- [x] 1.15 Create workload-identity.tf with managed identity resources
   - **Do**:
     1. Create `terraform/workload-identity.tf` with 3 resources exactly matching design.md
     2. `azurerm_user_assigned_identity.external_secrets`
