@@ -1,0 +1,82 @@
+# =============================================================================
+# Deploy Shared Infrastructure to AKS
+# =============================================================================
+# Applies ArgoCD Application manifests (infra-apps.yaml) to the cluster
+# whenever shared infrastructure changes are merged to main.
+#
+# This ensures that ArgoCD Applications stay in sync with the repo.
+# Without this, changes to infra-apps.yaml, gateway configs, certificates,
+# etc. would not take effect until manually kubectl apply'd.
+# =============================================================================
+
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Apply ArgoCD Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Azure and AKS
+        uses: AshleyHollis/shared-infra/.github/actions/setup-azure-aks@v1
+        with:
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Apply repo secret
+        run: |
+          echo "Registering shared-infra repo with ArgoCD..."
+          kubectl apply -f k8s/argocd/repo-secret.yaml
+          echo "✓ Repo secret applied"
+
+      - name: Apply infrastructure applications
+        run: |
+          echo "Applying ArgoCD infrastructure applications..."
+          kubectl apply -f k8s/argocd/infra-apps.yaml
+          echo "✓ Infrastructure applications applied"
+
+      - name: Verify ArgoCD applications exist
+        run: |
+          echo "Waiting 10s for ArgoCD to register applications..."
+          sleep 10
+
+          echo ""
+          echo "=== ArgoCD Infrastructure Applications ==="
+          kubectl get applications -n argocd -o custom-columns=\
+          'NAME:.metadata.name,SYNC:.status.sync.status,HEALTH:.status.health.status,REPO:.spec.source.repoURL' \
+          2>/dev/null || echo "Warning: Could not list applications"
+
+          echo ""
+          echo "=== Checking key applications ==="
+          APPS=(gateway-api certificates external-dns cert-manager external-secrets)
+          ALL_FOUND=true
+
+          for app in "${APPS[@]}"; do
+            if kubectl get application "$app" -n argocd &>/dev/null; then
+              SYNC=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
+              HEALTH=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
+              echo "✓ $app (sync: $SYNC, health: $HEALTH)"
+            else
+              echo "✗ $app NOT FOUND"
+              ALL_FOUND=false
+            fi
+          done
+
+          if [[ "$ALL_FOUND" != "true" ]]; then
+            echo ""
+            echo "::warning::Some infrastructure applications were not found. They may still be creating."
+          fi
