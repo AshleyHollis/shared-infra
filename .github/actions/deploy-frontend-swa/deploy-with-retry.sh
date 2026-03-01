@@ -8,13 +8,18 @@ set -euo pipefail
 : "${AZURE_STATIC_WEB_APPS_API_TOKEN:?Required}"
 : "${APP_LOCATION:?Required}"
 : "${OUTPUT_LOCATION:-}"
-: "${DEPLOYMENT_ENVIRONMENT:=preview}"  # Default to preview, override for production or pr-{number}
 : "${VERBOSE:=false}"
 : "${MAX_ATTEMPTS:=3}"
-: "${TIMEOUT_SECONDS:=1200}"  # 20 minutes per attempt (SWA binary has 15min internal timeout)
+: "${TIMEOUT_SECONDS:=1200}" # 20 minutes per attempt (SWA binary has 15min internal timeout)
+
+# Normalize deployment environment:
+# - empty or "default" -> "production" for SWA CLI (production environment)
+# - "pr-{N}" -> keep as-is (preview environment)
+if [[ -z "${DEPLOYMENT_ENVIRONMENT:-}" || "${DEPLOYMENT_ENVIRONMENT}" == "default" ]]; then
+  DEPLOYMENT_ENVIRONMENT="production"
+fi
 
 # Export GitHub context for SWA CLI (fixes "Could not get repository branch/url" warnings)
-# These are automatically available in GitHub Actions but need to be explicitly exported
 export GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-}"
 export GITHUB_REF="${GITHUB_REF:-}"
 export GITHUB_SHA="${GITHUB_SHA:-}"
@@ -24,7 +29,6 @@ export GITHUB_EVENT_NAME="${GITHUB_EVENT_NAME:-}"
 export GITHUB_ACTOR="${GITHUB_ACTOR:-}"
 
 # Set REPOSITORY_BASE for SWA CLI to detect branch (fixes "Could not get repository branch" warning)
-# Format: owner/repo#branch
 if [ -n "${GITHUB_REPOSITORY}" ] && [ -n "${GITHUB_HEAD_REF}" ]; then
   export REPOSITORY_BASE="${GITHUB_REPOSITORY}#${GITHUB_HEAD_REF}"
 elif [ -n "${GITHUB_REPOSITORY}" ] && [ -n "${GITHUB_REF##*/}" ]; then
@@ -45,13 +49,13 @@ log_error() { echo "[ERROR] $*"; }
 # Print deployment header
 print_header() {
   echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
   log_info "🚀 Azure Static Web Apps Deployment"
   log_info "   Environment: ${DEPLOYMENT_ENVIRONMENT}"
   log_info "   App Location: ${APP_LOCATION}"
   log_info "   Max Attempts: ${MAX_ATTEMPTS}"
   log_info "   Timeout: ${TIMEOUT_SECONDS}s (final attempt)"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
   echo ""
 }
 
@@ -60,17 +64,17 @@ print_success() {
   local attempt=$1
   local elapsed=$2
   echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
   log_info "✅ Deployment successful! (attempt ${attempt}, ${elapsed}s)"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
 }
 
 # Print failure footer
 print_failure() {
   echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
   log_error "❌ Deployment failed after ${MAX_ATTEMPTS} attempts"
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "============================================================"
 }
 
 # Function to run deployment with timeout
@@ -82,9 +86,10 @@ run_deploy_with_timeout() {
   local strategy_label="fail-fast"
   [ "$attempt" -eq "$MAX_ATTEMPTS" ] && strategy_label="extended"
 
-  log_info "📦 Attempt ${attempt}/${MAX_ATTEMPTS} (${strategy_label}, ${timeout}s timeout)"
+  log_info "📋 Attempt ${attempt}/${MAX_ATTEMPTS} (${strategy_label}, ${timeout}s timeout)"
 
-  local start_time=$(date +%s)
+  local start_time
+  start_time=$(date +%s)
 
   # Build SWA CLI command with optional verbose flag
   local swa_cmd=(
@@ -102,8 +107,7 @@ run_deploy_with_timeout() {
   fi
 
   # Run SWA CLI with timeout and capture output
-  # Note: timeout command is available in GitHub Actions runners (both Linux and macOS)
-  # We need to capture output because SWA CLI returns exit code 0 even on deployment failure!
+  # Note: SWA CLI returns exit code 0 even on deployment failure — we must parse stdout
   local output_file
   output_file=$(mktemp)
 
@@ -120,8 +124,7 @@ run_deploy_with_timeout() {
 
   local elapsed=$(($(date +%s) - start_time))
 
-  # Check for deployment failure in output - SWA CLI returns 0 even when deployment fails!
-  # Look for explicit failure messages from the CLI
+  # Check for deployment failure in output — SWA CLI returns 0 even when deployment fails!
   if grep -q "Deployment Failed" "$output_file" || grep -q "Status: Failed" "$output_file"; then
     local failure_reason
     failure_reason=$(grep -o "Deployment Failure Reason: .*" "$output_file" | head -1 | sed 's/Deployment Failure Reason: //' || echo "Unknown")
@@ -132,7 +135,7 @@ run_deploy_with_timeout() {
 
   # Check for success indicators in output
   if grep -q "Status: Succeeded" "$output_file" || grep -q "Deployment complete" "$output_file"; then
-    log_info "   ✓ Deployed successfully (${elapsed}s)"
+    log_info "   ✔ Deployed successfully (${elapsed}s)"
     rm -f "$output_file"
     return 0
   fi
@@ -140,10 +143,10 @@ run_deploy_with_timeout() {
   rm -f "$output_file"
 
   if [ $cli_exit_code -eq 0 ]; then
-    log_info "   ✓ Completed (${elapsed}s)"
+    log_info "   ✔ Completed (${elapsed}s)"
     return 0
   elif [ $cli_exit_code -eq 124 ]; then
-    log_warn "   ⏱️  Timed out after ${timeout}s"
+    log_warn "   ⏱  Timed out after ${timeout}s"
     return $cli_exit_code
   else
     log_error "   ✗ Exit code ${cli_exit_code} (${elapsed}s)"
@@ -156,37 +159,32 @@ print_header
 
 total_start_time=$(date +%s)
 
-# Retry loop with per-attempt timeout strategy
-# Strategy: Fail fast on attempts 1-2 (5 min timeout), longer timeout on final attempt
+# Retry loop with per-attempt timeout strategy:
+#   Attempts 1-2: 300s (5 min) fail-fast — catches transient Azure slowness
+#   Attempt 3:    1200s (20 min) extended — allows for genuinely slow cold starts
 for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-  # Determine timeout for this attempt
   if [ "$attempt" -eq "$MAX_ATTEMPTS" ]; then
-    # Final attempt: Use configured timeout (default 600s = 10 minutes)
-    # This allows more time for genuinely slow deployments
     attempt_timeout="$TIMEOUT_SECONDS"
   else
-    # Attempts 1-2: Short timeout (5 minutes) for fail-fast retry
-    # Azure SWA can be transiently slow; quick retry often succeeds
     attempt_timeout="300"
   fi
 
   if run_deploy_with_timeout "$attempt" "$attempt_timeout"; then
     total_elapsed=$(($(date +%s) - total_start_time))
     print_success "$attempt" "$total_elapsed"
-    echo "DEPLOY_SUCCESS=true" >> "${GITHUB_OUTPUT:-/dev/stdout}"
-    echo "DEPLOY_ATTEMPT=$attempt" >> "${GITHUB_OUTPUT:-/dev/stdout}"
-    echo "DEPLOY_ENVIRONMENT=${DEPLOYMENT_ENVIRONMENT}" >> "${GITHUB_OUTPUT:-/dev/stdout}"
+    echo "DEPLOY_SUCCESS=true" >>"${GITHUB_OUTPUT:-/dev/stdout}"
+    echo "DEPLOY_ATTEMPT=$attempt" >>"${GITHUB_OUTPUT:-/dev/stdout}"
+    echo "DEPLOY_ENVIRONMENT=${DEPLOYMENT_ENVIRONMENT}" >>"${GITHUB_OUTPUT:-/dev/stdout}"
     exit 0
   fi
 
   # If this was the last attempt, fail
   if [ "$attempt" -eq "$MAX_ATTEMPTS" ]; then
     print_failure
-    echo "DEPLOY_SUCCESS=false" >> "${GITHUB_OUTPUT:-/dev/stdout}"
+    echo "DEPLOY_SUCCESS=false" >>"${GITHUB_OUTPUT:-/dev/stdout}"
     exit 1
   fi
 
-  # Otherwise, log retry
   log_info "   ↻ Retrying..."
   echo ""
 done
