@@ -300,7 +300,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.27 Add removed block for Resource Group in yt-summarizer
+- [x] 1.27 Add removed block for Resource Group in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/resource-group.tf`, add `removed` block for `azurerm_resource_group.main`
     2. Set `lifecycle { destroy = false }`
