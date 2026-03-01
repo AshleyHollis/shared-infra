@@ -245,7 +245,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-6, AC-8.1, AC-8.2, AC-8.3_
   - _Design: Section 3 - GitHub Actions_
 
-- [ ] 1.22 Update setup-terraform-azure cross-action reference
+- [x] 1.22 Update setup-terraform-azure cross-action reference
   - **Do**:
     1. In `.github/actions/setup-terraform-azure/action.yml`, find `uses: ./.github/actions/verify-azure-credentials`
     2. Replace with `uses: AshleyHollis/shared-infra/.github/actions/verify-azure-credentials@v1`
