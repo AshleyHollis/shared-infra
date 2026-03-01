@@ -1,12 +1,8 @@
 # =============================================================================
 # Deploy Shared Infrastructure to AKS
 # =============================================================================
-# Applies ArgoCD Application manifests (infra-apps.yaml) to the cluster
-# whenever shared infrastructure changes are merged to main.
-#
-# This ensures that ArgoCD Applications stay in sync with the repo.
-# Without this, changes to infra-apps.yaml, gateway configs, certificates,
-# etc. would not take effect until manually kubectl apply'd.
+# Applies ArgoCD Application manifests to the cluster and waits for sync.
+# Runs on every push to main and supports manual trigger.
 # =============================================================================
 
 name: Deploy Infrastructure
@@ -22,7 +18,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Apply ArgoCD Infrastructure
+    name: Deploy ArgoCD Infrastructure
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,70 +32,36 @@ jobs:
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Apply repo secret
-        run: |
-          echo "Registering shared-infra repo with ArgoCD..."
-          kubectl apply -f k8s/argocd/repo-secret.yaml
-          echo "✓ Repo secret applied"
+        run: kubectl apply -f k8s/argocd/repo-secret.yaml
 
       - name: Apply infrastructure applications
-        run: |
-          echo "Applying ArgoCD infrastructure applications..."
-          kubectl apply -f k8s/argocd/infra-apps.yaml
-          echo "✓ Infrastructure applications applied"
+        run: kubectl apply -f k8s/argocd/infra-apps.yaml
 
-      - name: Force refresh OutOfSync applications
-        run: |
-          APPS=(gateway-api certificates external-dns cert-manager external-secrets
-                cert-manager-clusterissuers eso-cluster-secretstore ingress-nginx)
+      - name: Wait for gateway-api sync
+        uses: AshleyHollis/shared-infra/.github/actions/argocd-wait@v1
+        with:
+          app-name: gateway-api
+          namespace: gateway-system
+          max-wait-seconds: '300'
+          cleanup-stuck-operations: 'true'
+          auto-recovery: 'true'
 
-          for app in "${APPS[@]}"; do
-            if kubectl get application "$app" -n argocd &>/dev/null; then
-              SYNC=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null)
-              if [[ "$SYNC" != "Synced" ]]; then
-                echo "Forcing hard refresh on $app (status: $SYNC)..."
-                kubectl annotate application "$app" -n argocd \
-                  argocd.argoproj.io/refresh=hard --overwrite
-              fi
-            fi
-          done
+      - name: Wait for certificates sync
+        uses: AshleyHollis/shared-infra/.github/actions/argocd-wait@v1
+        with:
+          app-name: certificates
+          namespace: gateway-system
+          max-wait-seconds: '120'
 
-      - name: Wait for sync convergence
-        run: |
-          echo "Waiting 30s for ArgoCD to sync..."
-          sleep 30
+      - name: Wait for external-dns sync
+        uses: AshleyHollis/shared-infra/.github/actions/argocd-wait@v1
+        with:
+          app-name: external-dns
+          namespace: gateway-system
+          max-wait-seconds: '120'
 
-      - name: Verify ArgoCD applications
+      - name: Verify all infrastructure applications
         run: |
-          echo "=== ArgoCD Infrastructure Applications ==="
+          echo "=== Final Infrastructure Status ==="
           kubectl get applications -n argocd -o custom-columns=\
-          'NAME:.metadata.name,SYNC:.status.sync.status,HEALTH:.status.health.status' \
-          2>/dev/null || echo "Warning: Could not list applications"
-
-          echo ""
-          echo "=== Key Application Status ==="
-          APPS=(gateway-api certificates external-dns cert-manager external-secrets)
-          FAILED=false
-
-          for app in "${APPS[@]}"; do
-            if kubectl get application "$app" -n argocd &>/dev/null; then
-              SYNC=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.sync.status}' 2>/dev/null || echo "Unknown")
-              HEALTH=$(kubectl get application "$app" -n argocd -o jsonpath='{.status.health.status}' 2>/dev/null || echo "Unknown")
-              echo "✓ $app (sync: $SYNC, health: $HEALTH)"
-
-              if [[ "$SYNC" != "Synced" ]]; then
-                echo "  Sync conditions:"
-                kubectl get application "$app" -n argocd \
-                  -o jsonpath='{.status.conditions[*].message}' 2>/dev/null || true
-                echo ""
-                FAILED=true
-              fi
-            else
-              echo "✗ $app NOT FOUND"
-              FAILED=true
-            fi
-          done
-
-          if [[ "$FAILED" == "true" ]]; then
-            echo ""
-            echo "::warning::Some applications are not fully synced. Check ArgoCD for details."
-          fi
+          'NAME:.metadata.name,SYNC:.status.sync.status,HEALTH:.status.health.status'
