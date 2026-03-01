@@ -9,7 +9,8 @@ inputs:
     required: true
   sql-admin-password:
     description: 'SQL admin password'
-    required: true
+    required: false
+    default: ''
   openai-api-key:
     description: 'OpenAI API key'
     required: false

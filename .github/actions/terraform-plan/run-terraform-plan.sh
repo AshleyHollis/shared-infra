@@ -16,12 +16,10 @@
 
 set -eo pipefail
 
-# Build terraform plan args - only pass optional vars when set
+# Build terraform plan args - only pass vars when set to avoid "undeclared variable" errors
 TF_ARGS=(-no-color -input=false -out=tfplan)
-TF_ARGS+=(-var="subscription_id=${SUBSCRIPTION_ID}")
-TF_ARGS+=(-var="sql_admin_password=${SQL_ADMIN_PASSWORD}")
-
-# Optional vars - only pass if non-empty to avoid "undeclared variable" errors
+[[ -n "$SUBSCRIPTION_ID" ]]     && TF_ARGS+=(-var="subscription_id=${SUBSCRIPTION_ID}")
+[[ -n "$SQL_ADMIN_PASSWORD" ]]   && TF_ARGS+=(-var="sql_admin_password=${SQL_ADMIN_PASSWORD}")
 [[ -n "$OPENAI_API_KEY" ]]      && TF_ARGS+=(-var="openai_api_key=${OPENAI_API_KEY}")
 [[ -n "$CLOUDFLARE_API_TOKEN" ]] && TF_ARGS+=(-var="cloudflare_api_token=${CLOUDFLARE_API_TOKEN}")
 [[ -n "$AUTH0_DOMAIN" ]]         && TF_ARGS+=(-var="auth0_domain=${AUTH0_DOMAIN}")
