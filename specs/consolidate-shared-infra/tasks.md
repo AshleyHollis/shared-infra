@@ -432,7 +432,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-5, AC-6.1, AC-6.2_
   - _Design: Section 2 - Data-Only Consumer Module_
 
-- [ ] 1.39 Create shared-infra-data consumer module: outputs.tf
+- [x] 1.39 Create shared-infra-data consumer module: outputs.tf
   - **Do**:
     1. Create `terraform/modules/shared-infra-data/outputs.tf` re-exporting all 19 shared-infra outputs
     2. Each output references `data.terraform_remote_state.shared_infra.outputs.<name>`
