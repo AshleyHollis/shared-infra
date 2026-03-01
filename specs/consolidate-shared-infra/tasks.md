@@ -664,7 +664,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(yt-summarizer): pass consumer update quality checkpoint` (only if fixes needed)
   - _Requirements: AC-7.1, AC-7.3_
 
-- [ ] 1.60 [VERIFY] Quality checkpoint: yt-summarizer retains app-specific resources
+- [x] 1.60 [VERIFY] Quality checkpoint: yt-summarizer retains app-specific resources
   - **Do**: Verify app-specific resources (SQL, storage, SWA, Auth0) still present in yt-summarizer
   - **Files**: None (verification only)
   - **Verify**: `grep -r 'azurerm_mssql\|azurerm_storage\|azurerm_static_site' ../yt-summarizer/infra/terraform/environments/prod/ --include='*.tf' | head -3 | grep -q '.' && echo APP_RESOURCES_INTACT`
