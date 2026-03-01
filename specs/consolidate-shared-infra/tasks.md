@@ -645,7 +645,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer_
 
-- [ ] 1.58 Update yt-summarizer outputs.tf to remove shared resource outputs
+- [x] 1.58 Update yt-summarizer outputs.tf to remove shared resource outputs
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/outputs.tf`, remove outputs for shared resources (RG, AKS, ACR, KV that are now in shared-infra)
     2. Keep app-specific outputs (SQL, storage, SWA, Auth0)
