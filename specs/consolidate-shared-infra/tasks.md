@@ -487,7 +487,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-8, AC-11.1, AC-11.2, AC-11.4_
   - _Design: Section 4 - terraform-plan.yml_
 
-- [ ] 1.44 Create terraform-apply.yml workflow
+- [x] 1.44 Create terraform-apply.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-apply.yml` exactly matching design.md
     2. Triggers on push to main, paths: `terraform/**`
