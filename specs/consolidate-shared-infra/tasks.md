@@ -391,7 +391,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.35 Add removed blocks for AKS and Workload Identity in yt-summarizer
+- [x] 1.35 Add removed blocks for AKS and Workload Identity in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/aks.tf`, add removed block for `module.aks.azurerm_kubernetes_cluster.aks`
     2. In `../yt-summarizer/infra/terraform/environments/prod/workload-identity.tf`, add removed blocks for `azurerm_user_assigned_identity.external_secrets`, `azurerm_federated_identity_credential.external_secrets`, `azurerm_role_assignment.external_secrets_kv_reader`
