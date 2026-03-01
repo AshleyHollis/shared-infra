@@ -47,8 +47,8 @@ inputs:
     required: false
 outputs:
   static_web_app_url:
-    description: Deployed Static Web App URL
-    value: ${{ steps.deploy.outputs.static_web_app_url }}
+    description: Deployed Static Web App URL (from SWA CLI output)
+    value: ${{ steps.deploy.outputs.DEPLOYED_URL }}
 runs:
   using: composite
   steps:

@@ -146,6 +146,12 @@ run_deploy_with_timeout() {
 
   # Check for success indicators in output
   if grep -q "Status: Succeeded" "$output_file" || grep -q "Deployment complete" "$output_file"; then
+    # Capture deployed URL from SWA CLI output (e.g., "Project deployed to https://...")
+    local deployed_url
+    deployed_url=$(grep -oP 'deployed to \K(https://[^\s\x1b]+)' "$output_file" | head -1 || true)
+    if [[ -n "$deployed_url" ]]; then
+      echo "DEPLOYED_URL=${deployed_url}" >>"${GITHUB_OUTPUT:-/dev/stdout}"
+    fi
     log_info "   ✔ Deployed successfully (${elapsed}s)"
     rm -f "$output_file"
     return 0
