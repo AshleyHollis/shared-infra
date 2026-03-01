@@ -268,7 +268,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.3_
   - _Design: Section 3_
 
-- [ ] 1.24 [VERIFY] Quality checkpoint: actionlint on all actions
+- [x] 1.24 [VERIFY] Quality checkpoint: actionlint on all actions
   - **Do**: Run actionlint on all action files (if actionlint is installed, otherwise validate YAML structure)
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint .github/actions/*/action.yml && echo PASS || (for f in .github/actions/*/action.yml; do python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || echo "INVALID: $f"; done && echo YAML_CHECK_DONE)`
@@ -278,7 +278,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 1: Resource Group (Tasks 1.25 - 1.28)
 
-- [ ] 1.25 Backup state before batch 1 migration
+- [x] 1.25 Backup state before batch 1 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch1.tfstate`
     2. Verify backup file is non-empty
@@ -289,7 +289,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.26 Add import block for Resource Group in shared-infra
+- [x] 1.26 Add import block for Resource Group in shared-infra
   - **Do**:
     1. Add import block to `terraform/main.tf` for `azurerm_resource_group.main`
     2. Use ID: `/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd`
