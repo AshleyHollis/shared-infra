@@ -133,6 +133,17 @@ run_deploy_with_timeout() {
     return 1
   fi
 
+  # Check for Oryx/SWA build failures — SWA CLI returns 0 even when Oryx fails!
+  # Oryx errors use ✖ markers and specific error messages
+  if grep -q "Failed to find a default file" "$output_file" || \
+     grep -q "Deployment Failure" "$output_file"; then
+    local oryx_error
+    oryx_error=$(grep -E "Failed to find|Deployment Failure" "$output_file" | head -3 | tr '\n' ' ' || echo "Unknown build error")
+    log_error "   ✗ Build failed: ${oryx_error} (${elapsed}s)"
+    rm -f "$output_file"
+    return 1
+  fi
+
   # Check for success indicators in output
   if grep -q "Status: Succeeded" "$output_file" || grep -q "Deployment complete" "$output_file"; then
     log_info "   ✔ Deployed successfully (${elapsed}s)"
@@ -142,9 +153,11 @@ run_deploy_with_timeout() {
 
   rm -f "$output_file"
 
+  # No success or failure indicators found — treat as failure if CLI returned 0
+  # SWA CLI is known to return 0 on failures, so absence of success indicators is suspicious
   if [ $cli_exit_code -eq 0 ]; then
-    log_info "   ✔ Completed (${elapsed}s)"
-    return 0
+    log_warn "   ⚠ CLI exited 0 but no success indicator found in output (${elapsed}s)"
+    return 1
   elif [ $cli_exit_code -eq 124 ]; then
     log_warn "   ⏱  Timed out after ${timeout}s"
     return $cli_exit_code
