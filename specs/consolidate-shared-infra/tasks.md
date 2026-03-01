@@ -86,7 +86,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-2.1_
   - _Design: Section 5 - OIDC Authentication_
 
-- [ ] 1.8 Copy key-vault module from yt-summarizer
+- [x] 1.8 Copy key-vault module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/key-vault/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/key-vault/main.tf`
