@@ -312,7 +312,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.28 [VERIFY] Quality checkpoint: terraform validate batch 1
+- [x] 1.28 [VERIFY] Quality checkpoint: terraform validate batch 1
   - **Do**: Validate both repos after batch 1 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
@@ -322,7 +322,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 2: Key Vault + ACR (Tasks 1.29 - 1.32)
 
-- [ ] 1.29 Backup state before batch 2 migration
+- [x] 1.29 Backup state before batch 2 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch2.tfstate`
     2. Verify backup file is non-empty
@@ -333,7 +333,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.30 Add import blocks for Key Vault and ACR in shared-infra
+- [x] 1.30 Add import blocks for Key Vault and ACR in shared-infra
   - **Do**:
     1. Add import block to `terraform/key-vault.tf` for `module.key_vault.azurerm_key_vault.vault`
     2. Add import block for `module.key_vault.azurerm_role_assignment.secrets_officer[0]` (role assignment ID must be retrieved via az CLI comment)
