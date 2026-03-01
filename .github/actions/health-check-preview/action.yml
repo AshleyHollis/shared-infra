@@ -70,7 +70,7 @@ runs:
 
     - name: Check external ingress health
       id: external-check
-      uses: ./.github/actions/health-check
+      uses: AshleyHollis/shared-infra/.github/actions/health-check@v1
       with:
         url: ${{ inputs.external-url }}/health/live
         max-attempts: ${{ inputs.max-attempts }}
