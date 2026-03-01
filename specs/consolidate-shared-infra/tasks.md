@@ -1011,7 +1011,7 @@ Focus: Create PR, CI monitoring, final validation.
   - **Done when**: PR created and open
   - **Commit**: None (PR creation)
 
-- [ ] 4.2 [VERIFY] CI pipeline passes
+- [x] 4.2 [VERIFY] CI pipeline passes
   - **Do**: Monitor CI checks on the PR
   - **Files**: None (verification only)
   - **Verify**: `gh pr checks || echo "CHECKS_PENDING"`
@@ -1019,7 +1019,7 @@ Focus: Create PR, CI monitoring, final validation.
   - **Commit**: None
   - _Requirements: AC-11.1, AC-11.4, AC-11.5_
 
-- [ ] 4.3 [VERIFY] Final AC checklist
+- [x] 4.3 [VERIFY] Final AC checklist
   - **Do**: Re-run AC checklist from 3.6 to confirm nothing regressed during PR creation
   - **Files**: None (verification only)
   - **Verify**: Same as task 3.6
