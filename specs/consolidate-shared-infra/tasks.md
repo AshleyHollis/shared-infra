@@ -97,7 +97,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/key-vault_
 
-- [ ] 1.9 [VERIFY] Quality checkpoint: terraform fmt modules
+- [x] 1.9 [VERIFY] Quality checkpoint: terraform fmt modules
   - **Do**: Run format check on all copied modules
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive modules/ && echo PASS`
@@ -107,7 +107,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Root Module Resource Files (Tasks 1.10 - 1.16)
 
-- [ ] 1.10 Create main.tf with resource group
+- [x] 1.10 Create main.tf with resource group
   - **Do**:
     1. Create `terraform/main.tf` with `azurerm_resource_group.main` exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
