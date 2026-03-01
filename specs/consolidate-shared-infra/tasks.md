@@ -707,7 +707,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.64 Remove meal-planner hardcoded variables and data sources
+- [x] 1.64 Remove meal-planner hardcoded variables and data sources
   - **Do**:
     1. In `../meal-planner/infra/terraform/variables.tf`, remove `shared_resource_group_name` and `shared_key_vault_name` variables
     2. Remove `data.azurerm_resource_group.shared` and `data.azurerm_key_vault.shared` data source blocks (from wherever they are defined)
