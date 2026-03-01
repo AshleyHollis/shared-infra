@@ -411,7 +411,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(migration): pass batch 3 quality checkpoint` (only if fixes needed)
   - _Requirements: FR-3, AC-5.1, AC-5.2, AC-5.4_
 
-- [ ] 1.37 [VERIFY] Quality checkpoint: all import/removed blocks complete
+- [x] 1.37 [VERIFY] Quality checkpoint: all import/removed blocks complete
   - **Do**: Verify all 3 state backup files exist and all import/removed blocks are present across batches
   - **Files**: None (verification only)
   - **Verify**: `test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch1.tfstate && test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch2.tfstate && test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch3.tfstate && echo BACKUPS_PASS; grep -r 'import' terraform/*.tf | grep -c 'import' | awk '{if($1>=8) print "IMPORTS_PASS"}'`
