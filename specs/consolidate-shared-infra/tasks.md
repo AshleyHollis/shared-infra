@@ -179,7 +179,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - workload-identity.tf_
 
-- [ ] 1.16 [VERIFY] Quality checkpoint: terraform validate root module
+- [x] 1.16 [VERIFY] Quality checkpoint: terraform validate root module
   - **Do**: Run full validation on root module (requires init with backend disabled)
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -189,7 +189,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Outputs + Lock File (Tasks 1.17 - 1.20)
 
-- [ ] 1.17 Create outputs.tf with stable API contract
+- [x] 1.17 Create outputs.tf with stable API contract
   - **Do**:
     1. Create `terraform/outputs.tf` with all outputs from design.md
     2. Include `description` attribute on every output
