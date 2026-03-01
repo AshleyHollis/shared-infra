@@ -737,7 +737,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Consumer Workflow Updates (Tasks 1.67 - 1.70)
 
-- [ ] 1.67 Update yt-summarizer workflows to use shared actions
+- [x] 1.67 Update yt-summarizer workflows to use shared actions
   - **Do**:
     1. In all `../yt-summarizer/.github/workflows/*.yml` files, replace `./.github/actions/<name>` with `AshleyHollis/shared-infra/.github/actions/<name>@v1`
     2. Apply to all 15 workflow files
