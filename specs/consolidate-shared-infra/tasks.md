@@ -588,7 +588,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Rework yt-summarizer Key Vault (Tasks 1.53 - 1.54)
 
-- [ ] 1.53 Rework yt-summarizer key-vault.tf to keep secrets, remove vault creation
+- [x] 1.53 Rework yt-summarizer key-vault.tf to keep secrets, remove vault creation
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/key-vault.tf`, replace the `module.key_vault` call with direct `azurerm_key_vault_secret` resources
     2. Secrets reference `module.shared.key_vault_id` instead of creating the vault
