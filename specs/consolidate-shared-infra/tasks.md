@@ -748,7 +748,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.6_
   - _Design: Consumer Update Design - Consumer Action Updates_
 
-- [ ] 1.68 Update meal-planner workflows to use shared actions
+- [x] 1.68 Update meal-planner workflows to use shared actions
   - **Do**:
     1. In all `../meal-planner/.github/workflows/*.yml` files, replace `./.github/actions/<name>` with `AshleyHollis/shared-infra/.github/actions/<name>@v1`
     2. Apply to all 9 workflow files
