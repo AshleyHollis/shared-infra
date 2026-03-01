@@ -474,7 +474,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Internal CI Workflows (Tasks 1.43 - 1.47)
 
-- [ ] 1.43 Create terraform-plan.yml workflow
+- [x] 1.43 Create terraform-plan.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-plan.yml` exactly matching design.md
     2. Triggers on PR to main, paths: `terraform/**`, `.github/workflows/terraform-plan.yml`
