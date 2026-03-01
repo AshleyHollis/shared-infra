@@ -719,7 +719,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2, AC-7.4_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.65 [VERIFY] Quality checkpoint: meal-planner terraform validate
+- [x] 1.65 [VERIFY] Quality checkpoint: meal-planner terraform validate
   - **Do**: Full validation of meal-planner after consumer updates
   - **Files**: None (verification only)
   - **Verify**: `cd ../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check && echo PASS`
