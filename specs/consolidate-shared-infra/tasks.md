@@ -256,7 +256,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.2, AC-8.6_
   - _Design: Section 3 - Actions requiring update_
 
-- [ ] 1.23 Verify all actions have name, description, and typed inputs
+- [x] 1.23 Verify all actions have name, description, and typed inputs
   - **Do**:
     1. Check each action.yml has `name:` and `description:` fields
     2. Check that inputs have type annotations where applicable
