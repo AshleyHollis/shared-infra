@@ -19,7 +19,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-2, AC-1.1, AC-1.3, AC-1.4_
   - _Design: Section 1 - Terraform Root Module_
 
-- [ ] 1.2 Create TF foundation files: backend.tf, versions.tf, providers.tf
+- [x] 1.2 Create TF foundation files: backend.tf, versions.tf, providers.tf
   - **Do**:
     1. Create `terraform/backend.tf` with azurerm backend config (storage_account_name: `stytsummarizertfstate`, container: `tfstate`, key: `shared-infra.tfstate`, use_oidc: true)
     2. Create `terraform/versions.tf` with `required_version >= 1.7.0`, azurerm `>= 4.57.0, < 5.0`, azuread `>= 3.7.0`
