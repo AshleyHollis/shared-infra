@@ -222,7 +222,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-14, AC-3.4_
   - _Design: Section 1 - versions.tf_
 
-- [ ] 1.20 [VERIFY] Quality checkpoint: lock file and full validate
+- [x] 1.20 [VERIFY] Quality checkpoint: lock file and full validate
   - **Do**: Verify lock file is committed and root module still validates
   - **Files**: None (verification only)
   - **Verify**: `git ls-files terraform/.terraform.lock.hcl | grep -q '.terraform.lock.hcl' && cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo PASS`
@@ -232,7 +232,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Copy 53 GitHub Actions (Tasks 1.21 - 1.24)
 
-- [ ] 1.21 Copy all 53 composite actions from yt-summarizer
+- [x] 1.21 Copy all 53 composite actions from yt-summarizer
   - **Do**:
     1. Create `.github/actions/` directory structure
     2. Copy all 53 action directories from `../yt-summarizer/.github/actions/` to `.github/actions/`
