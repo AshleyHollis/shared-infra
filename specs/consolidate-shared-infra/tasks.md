@@ -6,7 +6,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Bootstrap + Foundation (Tasks 1.1 - 1.4)
 
-- [ ] 1.1 Create bootstrap backend script
+- [x] 1.1 Create bootstrap backend script
   - **Do**:
     1. Create `scripts/bootstrap-backend.sh` that verifies the Azure Storage Account and container exist for shared-infra state
     2. Script uses `az storage account show` and `az storage container show` to validate
@@ -19,7 +19,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-2, AC-1.1, AC-1.3, AC-1.4_
   - _Design: Section 1 - Terraform Root Module_
 
-- [ ] 1.2 Create TF foundation files: backend.tf, versions.tf, providers.tf
+- [x] 1.2 Create TF foundation files: backend.tf, versions.tf, providers.tf
   - **Do**:
     1. Create `terraform/backend.tf` with azurerm backend config (storage_account_name: `stytsummarizertfstate`, container: `tfstate`, key: `shared-infra.tfstate`, use_oidc: true)
     2. Create `terraform/versions.tf` with `required_version >= 1.7.0`, azurerm `>= 4.57.0, < 5.0`, azuread `>= 3.7.0`
@@ -31,7 +31,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-2, AC-1.2, AC-3.2, AC-3.3_
   - _Design: Section 1 - backend.tf, versions.tf_
 
-- [ ] 1.3 Create TF locals.tf, variables.tf, terraform.auto.tfvars
+- [x] 1.3 Create TF locals.tf, variables.tf, terraform.auto.tfvars
   - **Do**:
     1. Create `terraform/locals.tf` with `name_prefix = "ytsumm-prd"` and `common_tags` map
     2. Create `terraform/variables.tf` with subscription_id, location, kubernetes_version, aks_node_size, aks_os_disk_size_gb, acr_sku, key_vault_secrets_officer_principal_id (all with defaults per design.md)
@@ -43,7 +43,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - locals.tf, variables.tf_
 
-- [ ] 1.4 [VERIFY] Quality checkpoint: terraform fmt + validate foundation
+- [x] 1.4 [VERIFY] Quality checkpoint: terraform fmt + validate foundation
   - **Do**: Run formatting and basic validation on the foundation files
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && echo PASS`
@@ -53,7 +53,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Copy Modules from yt-summarizer (Tasks 1.5 - 1.9)
 
-- [ ] 1.5 Copy AKS module from yt-summarizer
+- [x] 1.5 Copy AKS module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/aks/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/aks/main.tf` exactly as-is
@@ -64,7 +64,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/aks_
 
-- [ ] 1.6 Copy container-registry module from yt-summarizer
+- [x] 1.6 Copy container-registry module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/container-registry/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/container-registry/main.tf`
@@ -75,7 +75,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/container-registry_
 
-- [ ] 1.7 Copy github-oidc module from yt-summarizer
+- [x] 1.7 Copy github-oidc module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/github-oidc/` directory
     2. Copy `main.tf`, `outputs.tf`, `variables.tf` from `../yt-summarizer/infra/terraform/modules/github-oidc/`
@@ -86,7 +86,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-2.1_
   - _Design: Section 5 - OIDC Authentication_
 
-- [ ] 1.8 Copy key-vault module from yt-summarizer
+- [x] 1.8 Copy key-vault module from yt-summarizer
   - **Do**:
     1. Create `terraform/modules/key-vault/` directory
     2. Copy `main.tf` from `../yt-summarizer/infra/terraform/modules/key-vault/main.tf`
@@ -97,7 +97,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - modules/key-vault_
 
-- [ ] 1.9 [VERIFY] Quality checkpoint: terraform fmt modules
+- [x] 1.9 [VERIFY] Quality checkpoint: terraform fmt modules
   - **Do**: Run format check on all copied modules
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive modules/ && echo PASS`
@@ -107,7 +107,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Root Module Resource Files (Tasks 1.10 - 1.16)
 
-- [ ] 1.10 Create main.tf with resource group
+- [x] 1.10 Create main.tf with resource group
   - **Do**:
     1. Create `terraform/main.tf` with `azurerm_resource_group.main` exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
@@ -119,7 +119,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - main.tf_
 
-- [ ] 1.11 Create aks.tf with AKS module call
+- [x] 1.11 Create aks.tf with AKS module call
   - **Do**:
     1. Create `terraform/aks.tf` with `module.aks` call exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
@@ -131,7 +131,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - aks.tf_
 
-- [ ] 1.12 Create acr.tf with ACR module call
+- [x] 1.12 Create acr.tf with ACR module call
   - **Do**:
     1. Create `terraform/acr.tf` with `module.acr` call exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
@@ -143,7 +143,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - acr.tf_
 
-- [ ] 1.13 Create key-vault.tf with Key Vault module call
+- [x] 1.13 Create key-vault.tf with Key Vault module call
   - **Do**:
     1. Create `terraform/key-vault.tf` with `module.key_vault` call exactly matching design.md
     2. Include `lifecycle { prevent_destroy = true }`
@@ -155,7 +155,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, FR-4, AC-3.1, AC-3.6_
   - _Design: Section 1 - key-vault.tf_
 
-- [ ] 1.14 Create github-oidc.tf with OIDC module call
+- [x] 1.14 Create github-oidc.tf with OIDC module call
   - **Do**:
     1. Create `terraform/github-oidc.tf` with `module.github_oidc` call exactly matching design.md
     2. Set `github_repository = "shared-infra"`, `assign_contributor_role = true`, `acr_id = module.acr.id`
@@ -166,7 +166,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-2.1, AC-3.1_
   - _Design: Section 5 - OIDC Authentication_
 
-- [ ] 1.15 Create workload-identity.tf with managed identity resources
+- [x] 1.15 Create workload-identity.tf with managed identity resources
   - **Do**:
     1. Create `terraform/workload-identity.tf` with 3 resources exactly matching design.md
     2. `azurerm_user_assigned_identity.external_secrets`
@@ -179,7 +179,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-1, AC-3.1_
   - _Design: Section 1 - workload-identity.tf_
 
-- [ ] 1.16 [VERIFY] Quality checkpoint: terraform validate root module
+- [x] 1.16 [VERIFY] Quality checkpoint: terraform validate root module
   - **Do**: Run full validation on root module (requires init with backend disabled)
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -189,7 +189,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Outputs + Lock File (Tasks 1.17 - 1.20)
 
-- [ ] 1.17 Create outputs.tf with stable API contract
+- [x] 1.17 Create outputs.tf with stable API contract
   - **Do**:
     1. Create `terraform/outputs.tf` with all outputs from design.md
     2. Include `description` attribute on every output
@@ -202,7 +202,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-10, AC-4.1, AC-4.2, AC-4.3_
   - _Design: Section 1 - outputs.tf_
 
-- [ ] 1.18 [VERIFY] Quality checkpoint: full terraform validate with outputs
+- [x] 1.18 [VERIFY] Quality checkpoint: full terraform validate with outputs
   - **Do**: Re-validate entire root module after adding outputs
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -210,7 +210,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(terraform): pass quality checkpoint` (only if fixes needed)
   - _Requirements: FR-1, FR-10, AC-4.1_
 
-- [ ] 1.19 Commit .terraform.lock.hcl after terraform init
+- [x] 1.19 Commit .terraform.lock.hcl after terraform init
   - **Do**:
     1. Run `cd terraform && terraform init -backend=false` to generate `.terraform.lock.hcl`
     2. Verify lock file was created and contains provider hashes for azurerm and azuread
@@ -222,7 +222,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-14, AC-3.4_
   - _Design: Section 1 - versions.tf_
 
-- [ ] 1.20 [VERIFY] Quality checkpoint: lock file and full validate
+- [x] 1.20 [VERIFY] Quality checkpoint: lock file and full validate
   - **Do**: Verify lock file is committed and root module still validates
   - **Files**: None (verification only)
   - **Verify**: `git ls-files terraform/.terraform.lock.hcl | grep -q '.terraform.lock.hcl' && cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo PASS`
@@ -232,7 +232,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Copy 53 GitHub Actions (Tasks 1.21 - 1.24)
 
-- [ ] 1.21 Copy all 53 composite actions from yt-summarizer
+- [x] 1.21 Copy all 53 composite actions from yt-summarizer
   - **Do**:
     1. Create `.github/actions/` directory structure
     2. Copy all 53 action directories from `../yt-summarizer/.github/actions/` to `.github/actions/`
@@ -245,7 +245,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-6, AC-8.1, AC-8.2, AC-8.3_
   - _Design: Section 3 - GitHub Actions_
 
-- [ ] 1.22 Update setup-terraform-azure cross-action reference
+- [x] 1.22 Update setup-terraform-azure cross-action reference
   - **Do**:
     1. In `.github/actions/setup-terraform-azure/action.yml`, find `uses: ./.github/actions/verify-azure-credentials`
     2. Replace with `uses: AshleyHollis/shared-infra/.github/actions/verify-azure-credentials@v1`
@@ -256,7 +256,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.2, AC-8.6_
   - _Design: Section 3 - Actions requiring update_
 
-- [ ] 1.23 Verify all actions have name, description, and typed inputs
+- [x] 1.23 Verify all actions have name, description, and typed inputs
   - **Do**:
     1. Check each action.yml has `name:` and `description:` fields
     2. Check that inputs have type annotations where applicable
@@ -268,7 +268,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.3_
   - _Design: Section 3_
 
-- [ ] 1.24 [VERIFY] Quality checkpoint: actionlint on all actions
+- [x] 1.24 [VERIFY] Quality checkpoint: actionlint on all actions
   - **Do**: Run actionlint on all action files (if actionlint is installed, otherwise validate YAML structure)
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint .github/actions/*/action.yml && echo PASS || (for f in .github/actions/*/action.yml; do python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || echo "INVALID: $f"; done && echo YAML_CHECK_DONE)`
@@ -278,7 +278,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 1: Resource Group (Tasks 1.25 - 1.28)
 
-- [ ] 1.25 Backup state before batch 1 migration
+- [x] 1.25 Backup state before batch 1 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch1.tfstate`
     2. Verify backup file is non-empty
@@ -289,7 +289,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.26 Add import block for Resource Group in shared-infra
+- [x] 1.26 Add import block for Resource Group in shared-infra
   - **Do**:
     1. Add import block to `terraform/main.tf` for `azurerm_resource_group.main`
     2. Use ID: `/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd`
@@ -300,7 +300,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.27 Add removed block for Resource Group in yt-summarizer
+- [x] 1.27 Add removed block for Resource Group in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/resource-group.tf`, add `removed` block for `azurerm_resource_group.main`
     2. Set `lifecycle { destroy = false }`
@@ -312,7 +312,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 1_
 
-- [ ] 1.28 [VERIFY] Quality checkpoint: terraform validate batch 1
+- [x] 1.28 [VERIFY] Quality checkpoint: terraform validate batch 1
   - **Do**: Validate both repos after batch 1 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
@@ -322,7 +322,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 2: Key Vault + ACR (Tasks 1.29 - 1.32)
 
-- [ ] 1.29 Backup state before batch 2 migration
+- [x] 1.29 Backup state before batch 2 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch2.tfstate`
     2. Verify backup file is non-empty
@@ -333,7 +333,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.30 Add import blocks for Key Vault and ACR in shared-infra
+- [x] 1.30 Add import blocks for Key Vault and ACR in shared-infra
   - **Do**:
     1. Add import block to `terraform/key-vault.tf` for `module.key_vault.azurerm_key_vault.vault`
     2. Add import block for `module.key_vault.azurerm_role_assignment.secrets_officer[0]` (role assignment ID must be retrieved via az CLI comment)
@@ -345,7 +345,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.31 Add removed blocks for Key Vault and ACR in yt-summarizer
+- [x] 1.31 Add removed blocks for Key Vault and ACR in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/key-vault.tf`, add removed blocks for `module.key_vault.azurerm_key_vault.vault` and `module.key_vault.azurerm_role_assignment.secrets_officer[0]`
     2. In `../yt-summarizer/infra/terraform/environments/prod/acr.tf`, add removed block for `module.acr.azurerm_container_registry.acr`
@@ -357,7 +357,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 2_
 
-- [ ] 1.32 [VERIFY] Quality checkpoint: terraform validate batch 2
+- [x] 1.32 [VERIFY] Quality checkpoint: terraform validate batch 2
   - **Do**: Validate both repos after batch 2 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
@@ -367,7 +367,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Import Blocks - Batch 3: AKS + Workload Identity (Tasks 1.33 - 1.37)
 
-- [ ] 1.33 Backup state before batch 3 migration
+- [x] 1.33 Backup state before batch 3 migration
   - **Do**:
     1. Run `cd ../yt-summarizer/infra/terraform/environments/prod && terraform state pull > backup-batch3.tfstate`
     2. Verify backup file is non-empty
@@ -378,7 +378,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-11, AC-5.5_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.34 Add import blocks for AKS and Workload Identity in shared-infra
+- [x] 1.34 Add import blocks for AKS and Workload Identity in shared-infra
   - **Do**:
     1. Add import block to `terraform/aks.tf` for `module.aks.azurerm_kubernetes_cluster.aks`
     2. Add import block to `terraform/workload-identity.tf` for `azurerm_user_assigned_identity.external_secrets`
@@ -391,7 +391,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.2_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.35 Add removed blocks for AKS and Workload Identity in yt-summarizer
+- [x] 1.35 Add removed blocks for AKS and Workload Identity in yt-summarizer
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/aks.tf`, add removed block for `module.aks.azurerm_kubernetes_cluster.aks`
     2. In `../yt-summarizer/infra/terraform/environments/prod/workload-identity.tf`, add removed blocks for `azurerm_user_assigned_identity.external_secrets`, `azurerm_federated_identity_credential.external_secrets`, `azurerm_role_assignment.external_secrets_kv_reader`
@@ -403,7 +403,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-3, AC-5.1, AC-5.4_
   - _Design: State Migration Plan - Batch 3_
 
-- [ ] 1.36 [VERIFY] Quality checkpoint: terraform validate batch 3
+- [x] 1.36 [VERIFY] Quality checkpoint: terraform validate batch 3
   - **Do**: Validate both repos after batch 3 import/removed blocks
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo SHARED_PASS; cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo YTSUMM_PASS`
@@ -411,7 +411,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(migration): pass batch 3 quality checkpoint` (only if fixes needed)
   - _Requirements: FR-3, AC-5.1, AC-5.2, AC-5.4_
 
-- [ ] 1.37 [VERIFY] Quality checkpoint: all import/removed blocks complete
+- [x] 1.37 [VERIFY] Quality checkpoint: all import/removed blocks complete
   - **Do**: Verify all 3 state backup files exist and all import/removed blocks are present across batches
   - **Files**: None (verification only)
   - **Verify**: `test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch1.tfstate && test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch2.tfstate && test -s ../yt-summarizer/infra/terraform/environments/prod/backup-batch3.tfstate && echo BACKUPS_PASS; grep -r 'import' terraform/*.tf | grep -c 'import' | awk '{if($1>=8) print "IMPORTS_PASS"}'`
@@ -421,7 +421,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Data-Only Consumer Module (Tasks 1.38 - 1.42)
 
-- [ ] 1.38 Create shared-infra-data consumer module: main.tf
+- [x] 1.38 Create shared-infra-data consumer module: main.tf
   - **Do**:
     1. Create `terraform/modules/shared-infra-data/main.tf` with `data.terraform_remote_state.shared_infra` block
     2. Backend config: resource_group_name `rg-ytsummarizer-tfstate`, storage_account_name `stytsummarizertfstate`, container_name `tfstate`, key `shared-infra.tfstate`, use_oidc true
@@ -432,7 +432,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-5, AC-6.1, AC-6.2_
   - _Design: Section 2 - Data-Only Consumer Module_
 
-- [ ] 1.39 Create shared-infra-data consumer module: outputs.tf
+- [x] 1.39 Create shared-infra-data consumer module: outputs.tf
   - **Do**:
     1. Create `terraform/modules/shared-infra-data/outputs.tf` re-exporting all 19 shared-infra outputs
     2. Each output references `data.terraform_remote_state.shared_infra.outputs.<name>`
@@ -444,7 +444,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-5, AC-6.3_
   - _Design: Section 2 - outputs.tf_
 
-- [ ] 1.40 Create shared-infra-data consumer module: variables.tf (empty placeholder)
+- [x] 1.40 Create shared-infra-data consumer module: variables.tf (empty placeholder)
   - **Do**:
     1. Create `terraform/modules/shared-infra-data/variables.tf` as an empty file with a header comment
     2. Comment: `# No input variables required. Backend config is hardcoded per design.`
@@ -456,7 +456,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-5, AC-6.1_
   - _Design: Section 2 - File tree shows variables.tf in shared-infra-data_
 
-- [ ] 1.41 [VERIFY] Quality checkpoint: validate consumer module
+- [x] 1.41 [VERIFY] Quality checkpoint: validate consumer module
   - **Do**: Validate the shared-infra-data module in isolation
   - **Files**: None (verification only)
   - **Verify**: `cd terraform/modules/shared-infra-data && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check && echo PASS`
@@ -464,7 +464,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(modules): pass consumer module quality checkpoint` (only if fixes needed)
   - _Requirements: FR-5, AC-6.1, AC-6.2, AC-6.3_
 
-- [ ] 1.42 [VERIFY] Quality checkpoint: full shared-infra validate after consumer module
+- [x] 1.42 [VERIFY] Quality checkpoint: full shared-infra validate after consumer module
   - **Do**: Re-validate entire root module to ensure consumer module didn't break anything
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -474,7 +474,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Internal CI Workflows (Tasks 1.43 - 1.47)
 
-- [ ] 1.43 Create terraform-plan.yml workflow
+- [x] 1.43 Create terraform-plan.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-plan.yml` exactly matching design.md
     2. Triggers on PR to main, paths: `terraform/**`, `.github/workflows/terraform-plan.yml`
@@ -487,7 +487,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-8, AC-11.1, AC-11.2, AC-11.4_
   - _Design: Section 4 - terraform-plan.yml_
 
-- [ ] 1.44 Create terraform-apply.yml workflow
+- [x] 1.44 Create terraform-apply.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-apply.yml` exactly matching design.md
     2. Triggers on push to main, paths: `terraform/**`
@@ -500,7 +500,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-8, AC-11.3, AC-11.6_
   - _Design: Section 4 - terraform-apply.yml_
 
-- [ ] 1.45 Create actionlint.yml workflow
+- [x] 1.45 Create actionlint.yml workflow
   - **Do**:
     1. Create `.github/workflows/actionlint.yml` that runs actionlint on PR
     2. Triggers on PR to main, paths: `.github/**`
@@ -512,7 +512,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-11.5_
   - _Design: Section 4 - actionlint.yml_
 
-- [ ] 1.46 [VERIFY] Quality checkpoint: actionlint on workflows
+- [x] 1.46 [VERIFY] Quality checkpoint: actionlint on workflows
   - **Do**: Validate all workflow YAML files
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint .github/workflows/*.yml && echo PASS || (for f in .github/workflows/*.yml; do python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || echo "INVALID: $f"; done && echo YAML_CHECK_DONE)`
@@ -520,7 +520,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(ci): pass workflow quality checkpoint` (only if fixes needed)
   - _Requirements: AC-11.1, AC-11.3, AC-11.4, AC-11.5_
 
-- [ ] 1.47 Set shared-infra repo to public visibility
+- [x] 1.47 Set shared-infra repo to public visibility
   - **Do**:
     1. Run `gh repo edit AshleyHollis/shared-infra --visibility public`
     2. Verify the repo is now public
@@ -533,7 +533,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Reusable Workflows (Tasks 1.48 - 1.52)
 
-- [ ] 1.48 Create terraform-reusable.yml workflow
+- [x] 1.48 Create terraform-reusable.yml workflow
   - **Do**:
     1. Create `.github/workflows/terraform-reusable.yml` with `workflow_call` trigger
     2. Accept inputs: working_directory, environment
@@ -546,7 +546,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-7, AC-9.1, AC-9.2, AC-9.3, AC-9.4_
   - _Design: Section 4 - terraform-reusable.yml_
 
-- [ ] 1.49 Create build-and-push.yml reusable workflow
+- [x] 1.49 Create build-and-push.yml reusable workflow
   - **Do**:
     1. Create `.github/workflows/build-and-push.yml` with `workflow_call` trigger
     2. Accept inputs: image_name, dockerfile_path, build_context
@@ -558,7 +558,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-7, AC-9.1, AC-9.2_
   - _Design: Section 4 - build-and-push.yml_
 
-- [ ] 1.50 Create deploy-to-aks.yml reusable workflow
+- [x] 1.50 Create deploy-to-aks.yml reusable workflow
   - **Do**:
     1. Create `.github/workflows/deploy-to-aks.yml` with `workflow_call` trigger
     2. Accept inputs: cluster_name, resource_group, namespace, image_tag
@@ -570,7 +570,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-7, AC-9.1, AC-9.2_
   - _Design: Section 4 - deploy-to-aks.yml_
 
-- [ ] 1.51 [VERIFY] Quality checkpoint: actionlint on all workflows
+- [x] 1.51 [VERIFY] Quality checkpoint: actionlint on all workflows
   - **Do**: Validate all workflow files including reusable ones
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint .github/workflows/*.yml && echo PASS || (for f in .github/workflows/*.yml; do python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || echo "INVALID: $f"; done && echo YAML_CHECK_DONE)`
@@ -578,7 +578,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(workflows): pass quality checkpoint` (only if fixes needed)
   - _Requirements: FR-7, AC-9.1, AC-9.5_
 
-- [ ] 1.52 [VERIFY] Quality checkpoint: reusable workflow inputs/outputs
+- [x] 1.52 [VERIFY] Quality checkpoint: reusable workflow inputs/outputs
   - **Do**: Verify reusable workflows accept required inputs per design.md
   - **Files**: None (verification only)
   - **Verify**: `grep -q 'working_directory\|working-directory' .github/workflows/terraform-reusable.yml && grep -q 'image_name\|image-name' .github/workflows/build-and-push.yml && grep -q 'cluster_name\|cluster-name' .github/workflows/deploy-to-aks.yml && echo PASS`
@@ -588,7 +588,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Rework yt-summarizer Key Vault (Tasks 1.53 - 1.54)
 
-- [ ] 1.53 Rework yt-summarizer key-vault.tf to keep secrets, remove vault creation
+- [x] 1.53 Rework yt-summarizer key-vault.tf to keep secrets, remove vault creation
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/key-vault.tf`, replace the `module.key_vault` call with direct `azurerm_key_vault_secret` resources
     2. Secrets reference `module.shared.key_vault_id` instead of creating the vault
@@ -601,7 +601,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-5.7, AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer key-vault.tf_
 
-- [ ] 1.54 [VERIFY] Quality checkpoint: yt-summarizer terraform validate
+- [x] 1.54 [VERIFY] Quality checkpoint: yt-summarizer terraform validate
   - **Do**: Validate yt-summarizer after key-vault rework
   - **Files**: None (verification only)
   - **Verify**: `cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo PASS`
@@ -611,7 +611,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Consumer Updates - yt-summarizer (Tasks 1.55 - 1.60)
 
-- [ ] 1.55 Add shared-infra-data module reference to yt-summarizer
+- [x] 1.55 Add shared-infra-data module reference to yt-summarizer
   - **Do**:
     1. Create `../yt-summarizer/infra/terraform/environments/prod/shared.tf` with `module "shared"` block
     2. Source: `git::https://github.com/AshleyHollis/shared-infra.git//terraform/modules/shared-infra-data?ref=v1`
@@ -622,7 +622,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-12, AC-6.4, AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer_
 
-- [ ] 1.56 Remove yt-summarizer ArgoCD module (moves to shared-infra)
+- [x] 1.56 Remove yt-summarizer ArgoCD module (moves to shared-infra)
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/argocd.tf`, add removed block for the ArgoCD module resources
     2. Set `lifecycle { destroy = false }` on each removed block
@@ -633,7 +633,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-5.1_
   - _Design: Consumer Update Design - ArgoCD handling_
 
-- [ ] 1.57 Remove yt-summarizer helm/kubernetes providers and AKS-related variables
+- [x] 1.57 Remove yt-summarizer helm/kubernetes providers and AKS-related variables
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/providers.tf`, remove helm and kubernetes provider blocks (no longer needed without AKS)
     2. In `../yt-summarizer/infra/terraform/environments/prod/versions.tf`, remove helm and kubernetes from required_providers, bump to `>= 1.7.0`
@@ -645,7 +645,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer_
 
-- [ ] 1.58 Update yt-summarizer outputs.tf to remove shared resource outputs
+- [x] 1.58 Update yt-summarizer outputs.tf to remove shared resource outputs
   - **Do**:
     1. In `../yt-summarizer/infra/terraform/environments/prod/outputs.tf`, remove outputs for shared resources (RG, AKS, ACR, KV that are now in shared-infra)
     2. Keep app-specific outputs (SQL, storage, SWA, Auth0)
@@ -656,7 +656,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.1_
   - _Design: Consumer Update Design - yt-summarizer_
 
-- [ ] 1.59 [VERIFY] Quality checkpoint: yt-summarizer terraform validate
+- [x] 1.59 [VERIFY] Quality checkpoint: yt-summarizer terraform validate
   - **Do**: Full validation of yt-summarizer after consumer updates
   - **Files**: None (verification only)
   - **Verify**: `cd ../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo PASS`
@@ -664,7 +664,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(yt-summarizer): pass consumer update quality checkpoint` (only if fixes needed)
   - _Requirements: AC-7.1, AC-7.3_
 
-- [ ] 1.60 [VERIFY] Quality checkpoint: yt-summarizer retains app-specific resources
+- [x] 1.60 [VERIFY] Quality checkpoint: yt-summarizer retains app-specific resources
   - **Do**: Verify app-specific resources (SQL, storage, SWA, Auth0) still present in yt-summarizer
   - **Files**: None (verification only)
   - **Verify**: `grep -r 'azurerm_mssql\|azurerm_storage\|azurerm_static_site' ../yt-summarizer/infra/terraform/environments/prod/ --include='*.tf' | head -3 | grep -q '.' && echo APP_RESOURCES_INTACT`
@@ -674,7 +674,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Consumer Updates - meal-planner (Tasks 1.61 - 1.66)
 
-- [ ] 1.61 Add shared-infra-data module reference to meal-planner
+- [x] 1.61 Add shared-infra-data module reference to meal-planner
   - **Do**:
     1. Create `../meal-planner/infra/terraform/shared.tf` with `module "shared"` block
     2. Source: `git::https://github.com/AshleyHollis/shared-infra.git//terraform/modules/shared-infra-data?ref=v1`
@@ -685,7 +685,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-12, AC-6.4, AC-7.2_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.62 Replace meal-planner hardcoded references with shared module
+- [x] 1.62 Replace meal-planner hardcoded references with shared module
   - **Do**:
     1. In `../meal-planner/infra/terraform/key-vault-secrets.tf`, replace `data.azurerm_resource_group.shared` and `data.azurerm_key_vault.shared` with `module.shared` references
     2. In `../meal-planner/infra/terraform/swa.tf`, replace `data.azurerm_resource_group.shared.name` with `module.shared.resource_group_name`
@@ -697,7 +697,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2, AC-7.4_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.63 Update meal-planner storage.tf to use shared module
+- [x] 1.63 Update meal-planner storage.tf to use shared module
   - **Do**:
     1. In `../meal-planner/infra/terraform/storage.tf`, replace `data.azurerm_resource_group.shared` with `module.shared` references
   - **Files**: `../meal-planner/infra/terraform/storage.tf`
@@ -707,7 +707,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.64 Remove meal-planner hardcoded variables and data sources
+- [x] 1.64 Remove meal-planner hardcoded variables and data sources
   - **Do**:
     1. In `../meal-planner/infra/terraform/variables.tf`, remove `shared_resource_group_name` and `shared_key_vault_name` variables
     2. Remove `data.azurerm_resource_group.shared` and `data.azurerm_key_vault.shared` data source blocks (from wherever they are defined)
@@ -719,7 +719,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-7.2, AC-7.4_
   - _Design: Consumer Update Design - meal-planner_
 
-- [ ] 1.65 [VERIFY] Quality checkpoint: meal-planner terraform validate
+- [x] 1.65 [VERIFY] Quality checkpoint: meal-planner terraform validate
   - **Do**: Full validation of meal-planner after consumer updates
   - **Files**: None (verification only)
   - **Verify**: `cd ../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check && echo PASS`
@@ -727,7 +727,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(meal-planner): pass consumer update quality checkpoint` (only if fixes needed)
   - _Requirements: AC-7.2, AC-7.3, AC-7.4_
 
-- [ ] 1.66 [VERIFY] Quality checkpoint: meal-planner decoupled from yt-summarizer
+- [x] 1.66 [VERIFY] Quality checkpoint: meal-planner decoupled from yt-summarizer
   - **Do**: Verify no remaining yt-summarizer references in meal-planner
   - **Files**: None (verification only)
   - **Verify**: `! grep -r 'yt-summarizer\|prod.tfstate' ../meal-planner/infra/terraform/ --include='*.tf' && echo DECOUPLED`
@@ -737,7 +737,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Consumer Workflow Updates (Tasks 1.67 - 1.70)
 
-- [ ] 1.67 Update yt-summarizer workflows to use shared actions
+- [x] 1.67 Update yt-summarizer workflows to use shared actions
   - **Do**:
     1. In all `../yt-summarizer/.github/workflows/*.yml` files, replace `./.github/actions/<name>` with `AshleyHollis/shared-infra/.github/actions/<name>@v1`
     2. Apply to all 15 workflow files
@@ -748,7 +748,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.6_
   - _Design: Consumer Update Design - Consumer Action Updates_
 
-- [ ] 1.68 Update meal-planner workflows to use shared actions
+- [x] 1.68 Update meal-planner workflows to use shared actions
   - **Do**:
     1. In all `../meal-planner/.github/workflows/*.yml` files, replace `./.github/actions/<name>` with `AshleyHollis/shared-infra/.github/actions/<name>@v1`
     2. Apply to all 9 workflow files
@@ -759,7 +759,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-8.6_
   - _Design: Consumer Update Design - Consumer Action Updates_
 
-- [ ] 1.69 [VERIFY] Quality checkpoint: actionlint on consumer workflows
+- [x] 1.69 [VERIFY] Quality checkpoint: actionlint on consumer workflows
   - **Do**: Validate all workflow files in both consumer repos
   - **Files**: None (verification only)
   - **Verify**: `which actionlint > /dev/null 2>&1 && actionlint ../yt-summarizer/.github/workflows/*.yml && actionlint ../meal-planner/.github/workflows/*.yml && echo PASS || echo ACTIONLINT_NOT_AVAILABLE`
@@ -767,7 +767,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(consumers): pass workflow quality checkpoint` (only if fixes needed)
   - _Requirements: AC-8.6_
 
-- [ ] 1.70 [VERIFY] Quality checkpoint: all consumer action refs use @v1
+- [x] 1.70 [VERIFY] Quality checkpoint: all consumer action refs use @v1
   - **Do**: Verify both consumer repos reference shared-infra actions with @v1
   - **Files**: None (verification only)
   - **Verify**: `grep -r 'AshleyHollis/shared-infra/.github/actions/' ../yt-summarizer/.github/workflows/ | grep -c '@v1' | awk '{if($1>0) print "YT_REFS_PASS"}' && grep -r 'AshleyHollis/shared-infra/.github/actions/' ../meal-planner/.github/workflows/ | grep -c '@v1' | awk '{if($1>0) print "MP_REFS_PASS"}'`
@@ -777,7 +777,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 ### Versioning + Release Setup (Tasks 1.71 - 1.74)
 
-- [ ] 1.71 Create CHANGELOG.md for initial release
+- [x] 1.71 Create CHANGELOG.md for initial release
   - **Do**:
     1. Create `CHANGELOG.md` documenting v1.0.0 initial release
     2. List: 53 composite actions consolidated, 6 workflows, TF root module, data-only consumer module
@@ -789,7 +789,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: AC-10.5_
   - _Design: Versioning Strategy_
 
-- [ ] 1.72 Create v1.0.0 git tag and v1 major tag
+- [x] 1.72 Create v1.0.0 git tag and v1 major tag
   - **Do**:
     1. Create annotated tag `v1.0.0`: `git tag -a v1.0.0 -m "v1.0.0: Initial shared-infra release"`
     2. Create mutable major tag `v1` pointing to same commit: `git tag -f v1 v1.0.0`
@@ -801,7 +801,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - _Requirements: FR-9, AC-10.1, AC-10.2, AC-10.3, AC-10.4_
   - _Design: Versioning Strategy_
 
-- [ ] 1.73 [VERIFY] Full shared-infra validation checkpoint
+- [x] 1.73 [VERIFY] Full shared-infra validation checkpoint
   - **Do**: Comprehensive validation of entire shared-infra repo
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && terraform fmt -check -recursive && echo TF_PASS; ls -d ../.github/actions/*/action.yml | wc -l | grep -q '53' && echo ACTIONS_PASS; which actionlint > /dev/null 2>&1 && actionlint ../.github/workflows/*.yml && echo WORKFLOWS_PASS || echo ACTIONLINT_SKIP`
@@ -809,7 +809,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
   - **Commit**: `chore(shared-infra): pass comprehensive validation` (only if fixes needed)
   - _Requirements: FR-1, FR-6, FR-7, AC-3.1, AC-8.1, AC-9.1_
 
-- [ ] 1.74 [VERIFY] Verify v1 tag is accessible for consumer repos
+- [x] 1.74 [VERIFY] Verify v1 tag is accessible for consumer repos
   - **Do**: Verify the v1 tag exists on remote and can be referenced
   - **Files**: None (verification only)
   - **Verify**: `git ls-remote --tags origin | grep -q 'refs/tags/v1$' && git ls-remote --tags origin | grep -q 'refs/tags/v1.0.0' && echo REMOTE_TAGS_PASS`
@@ -821,7 +821,7 @@ Focus: Build shared-infra TF root module, copy modules/actions, create import bl
 
 Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
 
-- [ ] 2.1 Cross-repo terraform validate: shared-infra
+- [x] 2.1 Cross-repo terraform validate: shared-infra
   - **Do**:
     1. Run terraform init (backend=false) and validate in shared-infra
     2. Verify all import blocks reference valid resource addresses
@@ -832,7 +832,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-3.5, AC-3.7_
 
-- [ ] 2.2 Cross-repo terraform validate: yt-summarizer
+- [x] 2.2 Cross-repo terraform validate: yt-summarizer
   - **Do**:
     1. Run terraform init (backend=false) and validate in yt-summarizer
     2. Verify removed blocks are present for all migrated resources
@@ -843,7 +843,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-5.4, AC-5.7_
 
-- [ ] 2.3 Cross-repo terraform validate: meal-planner
+- [x] 2.3 Cross-repo terraform validate: meal-planner
   - **Do**:
     1. Run terraform init (backend=false) and validate in meal-planner
     2. Verify no references to yt-summarizer state remain
@@ -854,7 +854,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-7.3, AC-7.4_
 
-- [ ] 2.4 Verify meal-planner decoupling from yt-summarizer
+- [x] 2.4 Verify meal-planner decoupling from yt-summarizer
   - **Do**:
     1. Grep meal-planner TF files for any remaining yt-summarizer references
     2. Verify no `data.terraform_remote_state` pointing to yt-summarizer's prod.tfstate
@@ -865,7 +865,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-7.4_
 
-- [ ] 2.5 Verify no sensitive values in shared-infra outputs
+- [x] 2.5 Verify no sensitive values in shared-infra outputs
   - **Do**:
     1. Check `terraform/outputs.tf` for any `sensitive = true` attributes
     2. Verify no passwords, keys, or connection strings in output values
@@ -876,7 +876,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-4.2, NFR-4_
 
-- [ ] 2.6 Verify prevent_destroy on critical resources
+- [x] 2.6 Verify prevent_destroy on critical resources
   - **Do**:
     1. Check main.tf, aks.tf, acr.tf, key-vault.tf for `prevent_destroy = true` lifecycle
     2. Verify all 4 critical resources are protected
@@ -886,7 +886,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-4, AC-3.6_
 
-- [ ] 2.7 Verify blob versioning in bootstrap script
+- [x] 2.7 Verify blob versioning in bootstrap script
   - **Do**:
     1. Check bootstrap script includes `enable-versioning` command
     2. Verify rollback capability is documented
@@ -896,7 +896,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: AC-1.3, NFR-7_
 
-- [ ] 2.8 Verify .terraform.lock.hcl is committed
+- [x] 2.8 Verify .terraform.lock.hcl is committed
   - **Do**:
     1. Verify lock file is tracked in git
     2. Verify it contains expected provider hashes
@@ -906,7 +906,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-14, AC-3.4_
 
-- [ ] 2.9 Verify repo visibility is public
+- [x] 2.9 Verify repo visibility is public
   - **Do**:
     1. Check repo visibility via gh CLI
   - **Files**: None (read-only verification)
@@ -915,7 +915,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
   - **Commit**: None (verification only)
   - _Requirements: FR-13, AC-8.5_
 
-- [ ] 2.10 [VERIFY] Integration test: all 3 repos validate together
+- [x] 2.10 [VERIFY] Integration test: all 3 repos validate together
   - **Do**: Run validation across all 3 repos in sequence
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../../../../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo ALL_THREE_PASS`
@@ -927,7 +927,7 @@ Focus: Cross-repo validation, verify decoupling, end-to-end consistency.
 
 Focus: Full local CI suite, comprehensive checks.
 
-- [ ] 3.1 [VERIFY] Terraform format check (all repos)
+- [x] 3.1 [VERIFY] Terraform format check (all repos)
   - **Do**: Run terraform fmt -check across all modified Terraform directories
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && cd ../../yt-summarizer/infra/terraform && terraform fmt -check -recursive && cd ../../../meal-planner/infra/terraform && terraform fmt -check -recursive && echo FMT_PASS`
@@ -935,7 +935,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `style(terraform): fix formatting` (only if fixes needed)
   - _Requirements: AC-11.4_
 
-- [ ] 3.2 [VERIFY] Terraform validate (all repos)
+- [x] 3.2 [VERIFY] Terraform validate (all repos)
   - **Do**: Run terraform validate across all modified Terraform directories
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../yt-summarizer/infra/terraform/environments/prod && terraform init -backend=false > /dev/null 2>&1 && terraform validate && cd ../../../../../meal-planner/infra/terraform && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo VALIDATE_PASS`
@@ -943,7 +943,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(terraform): resolve validation errors` (only if fixes needed)
   - _Requirements: AC-3.5, AC-5.3, AC-7.3_
 
-- [ ] 3.3 [VERIFY] Action metadata completeness
+- [x] 3.3 [VERIFY] Action metadata completeness
   - **Do**: Verify all 53 actions have required metadata fields
   - **Files**: None (verification only)
   - **Verify**: `count=0; for f in .github/actions/*/action.yml; do if grep -q "^name:" "$f" && grep -q "^description:" "$f"; then count=$((count+1)); else echo "MISSING: $f"; fi; done; echo "$count actions verified" && test "$count" -eq 53 && echo METADATA_PASS`
@@ -951,7 +951,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(actions): add missing metadata` (only if fixes needed)
   - _Requirements: AC-8.3_
 
-- [ ] 3.4 [VERIFY] Workflow validation
+- [x] 3.4 [VERIFY] Workflow validation
   - **Do**: Validate all 6 workflow files for correct YAML structure and required fields
   - **Files**: None (verification only)
   - **Verify**: `for f in .github/workflows/*.yml; do python3 -c "import yaml; y=yaml.safe_load(open('$f')); assert 'on' in y or True in y, f'missing trigger: $f'" 2>&1 || echo "INVALID: $f"; done && echo WORKFLOW_YAML_PASS`
@@ -959,7 +959,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `fix(workflows): resolve validation issues` (only if fixes needed)
   - _Requirements: AC-9.1, AC-11.1_
 
-- [ ] 3.5 [VERIFY] Full local CI: fmt + validate + actionlint
+- [x] 3.5 [VERIFY] Full local CI: fmt + validate + actionlint
   - **Do**: Run complete local CI suite
   - **Files**: None (verification only)
   - **Verify**: `cd terraform && terraform fmt -check -recursive && terraform init -backend=false > /dev/null 2>&1 && terraform validate && echo TF_PASS; which actionlint > /dev/null 2>&1 && actionlint .github/workflows/*.yml && echo ACTIONLINT_PASS || echo ACTIONLINT_SKIP; echo LOCAL_CI_COMPLETE`
@@ -967,7 +967,7 @@ Focus: Full local CI suite, comprehensive checks.
   - **Commit**: `chore(quality): pass full local CI` (only if fixes needed)
   - _Requirements: AC-11.4, AC-11.5_
 
-- [ ] 3.6 [VERIFY] AC checklist verification
+- [x] 3.6 [VERIFY] AC checklist verification
   - **Do**: Programmatically verify each acceptance criterion is satisfied
   - **Files**: None (verification only)
   - **Verify**: Run the following checks:
@@ -999,7 +999,7 @@ Focus: Full local CI suite, comprehensive checks.
 
 Focus: Create PR, CI monitoring, final validation.
 
-- [ ] 4.1 Create PR for shared-infra consolidation
+- [x] 4.1 Create PR for shared-infra consolidation
   - **Do**:
     1. Verify current branch is a feature branch: `git branch --show-current`
     2. If on main, STOP and alert (should not happen)
@@ -1011,7 +1011,7 @@ Focus: Create PR, CI monitoring, final validation.
   - **Done when**: PR created and open
   - **Commit**: None (PR creation)
 
-- [ ] 4.2 [VERIFY] CI pipeline passes
+- [x] 4.2 [VERIFY] CI pipeline passes
   - **Do**: Monitor CI checks on the PR
   - **Files**: None (verification only)
   - **Verify**: `gh pr checks || echo "CHECKS_PENDING"`
@@ -1019,7 +1019,7 @@ Focus: Create PR, CI monitoring, final validation.
   - **Commit**: None
   - _Requirements: AC-11.1, AC-11.4, AC-11.5_
 
-- [ ] 4.3 [VERIFY] Final AC checklist
+- [x] 4.3 [VERIFY] Final AC checklist
   - **Do**: Re-run AC checklist from 3.6 to confirm nothing regressed during PR creation
   - **Files**: None (verification only)
   - **Verify**: Same as task 3.6

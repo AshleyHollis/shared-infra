@@ -1,0 +1,88 @@
+# Reusable Build and Push Workflow
+# Builds Docker images and pushes to Azure Container Registry (ACR)
+# Called by consumer repos (yt-summarizer, meal-planner) via workflow_call
+
+name: Build and Push
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        description: 'Name of the Docker image (e.g., yt-api, meal-planner-api)'
+        required: true
+        type: string
+      dockerfile_path:
+        description: 'Path to the Dockerfile'
+        required: false
+        type: string
+        default: './Dockerfile'
+      build_context:
+        description: 'Docker build context directory'
+        required: false
+        type: string
+        default: '.'
+
+    secrets:
+      AZURE_CLIENT_ID:
+        required: true
+      AZURE_TENANT_ID:
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        required: true
+
+    outputs:
+      image_tag:
+        description: 'Full image tag pushed to ACR (registry/image:sha)'
+        value: ${{ jobs.build-and-push.outputs.image_tag }}
+
+jobs:
+  build-and-push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.tags.outputs.image_tag }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to ACR
+        shell: bash
+        run: az acr login --name acrytsummprd
+
+      - name: Generate image tags
+        id: tags
+        shell: bash
+        run: |
+          SHA="${GITHUB_SHA::7}"
+          REGISTRY="acrytsummprd.azurecr.io"
+          IMAGE="${REGISTRY}/${{ inputs.image_name }}"
+          {
+            echo "image_latest=${IMAGE}:latest"
+            echo "image_sha=${IMAGE}:${SHA}"
+            echo "image_tag=${IMAGE}:${SHA}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build Docker image
+        shell: bash
+        run: |
+          docker build \
+            -f ${{ inputs.dockerfile_path }} \
+            -t ${{ steps.tags.outputs.image_latest }} \
+            -t ${{ steps.tags.outputs.image_sha }} \
+            ${{ inputs.build_context }}
+
+      - name: Push Docker image
+        shell: bash
+        run: |
+          docker push ${{ steps.tags.outputs.image_latest }}
+          docker push ${{ steps.tags.outputs.image_sha }}

@@ -1,0 +1,17 @@
+specs/.current-spec
+**/.progress.md
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+*.tfplan
+tfplan
+
+# Environment
+.env
+
+# Node
+node_modules/
