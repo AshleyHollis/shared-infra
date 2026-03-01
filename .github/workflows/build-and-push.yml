@@ -66,9 +66,11 @@ jobs:
           SHA="${GITHUB_SHA::7}"
           REGISTRY="acrytsummprd.azurecr.io"
           IMAGE="${REGISTRY}/${{ inputs.image_name }}"
-          echo "image_latest=${IMAGE}:latest" >> "$GITHUB_OUTPUT"
-          echo "image_sha=${IMAGE}:${SHA}" >> "$GITHUB_OUTPUT"
-          echo "image_tag=${IMAGE}:${SHA}" >> "$GITHUB_OUTPUT"
+          {
+            echo "image_latest=${IMAGE}:latest"
+            echo "image_sha=${IMAGE}:${SHA}"
+            echo "image_tag=${IMAGE}:${SHA}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Build Docker image
         shell: bash
