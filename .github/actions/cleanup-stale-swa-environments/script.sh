@@ -115,8 +115,8 @@ echo ""
 log_step "Checking environments for staleness..."
 echo ""
 
-# Process each environment
-echo "$environments" | jq -r '.[] | @json' | while IFS= read -r env_json; do
+# Process each environment (use process substitution to avoid subshell variable loss)
+while IFS= read -r env_json; do
   env_name=$(echo "$env_json" | jq -r '.name // empty')
   build_id=$(echo "$env_json" | jq -r '.properties.buildId // .name // empty')
   hostname=$(echo "$env_json" | jq -r '.properties.hostname // empty')
@@ -137,8 +137,14 @@ echo "$environments" | jq -r '.[] | @json' | while IFS= read -r env_json; do
   # Extract PR number from metadata
   pr_number=""
 
+  # Method 0: Extract from environment name (e.g., "pr3" or "pr-3" → 3)
+  # SWA CLI normalizes "pr-N" to "prN", so check both patterns
+  if [[ "$env_name" =~ ^pr-?([0-9]+)$ ]]; then
+    pr_number="${BASH_REMATCH[1]}"
+  fi
+
   # Method 1: Check if buildId is numeric (often the PR number)
-  if [[ "$build_id" =~ ^[0-9]+$ ]]; then
+  if [[ -z "$pr_number" ]] && [[ "$build_id" =~ ^[0-9]+$ ]]; then
     pr_number="$build_id"
   fi
 
@@ -286,7 +292,7 @@ echo "$environments" | jq -r '.[] | @json' | while IFS= read -r env_json; do
   fi
 
   echo ""
-done
+done < <(echo "$environments" | jq -r '.[] | @json')
 
 # Output results
 echo "deleted_count=$deleted_count" >> $GITHUB_OUTPUT
