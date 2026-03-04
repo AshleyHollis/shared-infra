@@ -29,7 +29,7 @@ spec:
             - --domain-filter=ashleyhollis.com
             - --policy=sync
             - --registry=txt
-            - --txt-owner-id=yt-summarizer-aks-ci
+            - --txt-owner-id=yt-summarizer-aks
             - --txt-prefix=_externaldns-
             - --interval=30s
             - --log-level=info
