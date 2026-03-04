@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/nginxinc/nginx-gateway-fabric
+    repoURL: https://github.com/nginx/nginx-gateway-fabric
     targetRevision: v1.5.0
-    path: deploy/helm-chart
+    path: charts/nginx-gateway-fabric
     helm:
       releaseName: nginx-gateway-fabric
       values: |
@@ -28,7 +28,6 @@ spec:
             type: LoadBalancer
             annotations:
               service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /health
-              service.beta.kubernetes.io/azure-load-balancer-ipv4: "20.255.113.149"
         nginx:
           image:
             repository: ghcr.io/nginxinc/nginx-gateway-fabric/nginx
