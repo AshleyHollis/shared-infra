@@ -1,5 +1,5 @@
 locals {
-  name_prefix = "ytsumm-prd"
+  name_prefix = "ytsumm-prd-ci"
 
   common_tags = {
     Environment = "prod"

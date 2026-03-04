@@ -11,5 +11,5 @@ module "acr" {
 
 import {
   to = module.acr.azurerm_container_registry.acr
-  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.ContainerRegistry/registries/acrytsummprd"
+  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd-ci/providers/Microsoft.ContainerRegistry/registries/acrytsummprdci"
 }

@@ -1,16 +1,6 @@
 import {
   to = azurerm_user_assigned_identity.external_secrets
-  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-ytsumm-prd-eso"
-}
-
-import {
-  to = azurerm_federated_identity_credential.external_secrets
-  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-ytsumm-prd-eso/federatedIdentityCredentials/fedcred-ytsumm-prd-eso"
-}
-
-import {
-  to = azurerm_role_assignment.external_secrets_kv_reader
-  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.KeyVault/vaults/kv-ytsumm-prd/providers/Microsoft.Authorization/roleAssignments/e284c75b-ac88-45c3-d30a-505b9b447512"
+  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd-ci/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-ytsumm-prd-ci-eso"
 }
 
 resource "azurerm_user_assigned_identity" "external_secrets" {

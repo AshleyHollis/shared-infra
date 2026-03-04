@@ -171,9 +171,24 @@ resource "azurerm_kubernetes_cluster" "aks" {
       default_node_pool[0].max_count,
       default_node_pool[0].min_count,
       default_node_pool[0].upgrade_settings,
+      default_node_pool[0].max_pods,
+      default_node_pool[0].os_disk_size_gb,
+      default_node_pool[0].os_disk_type,
+      default_node_pool[0].vm_size,
+      default_node_pool[0].kubelet_config,
+      default_node_pool[0].kubelet_disk_type,
+      default_node_pool[0].linux_os_config,
+      default_node_pool[0].pod_subnet_id,
+      default_node_pool[0].snapshot_id,
+      default_node_pool[0].ultra_ssd_enabled,
+      default_node_pool[0].vnet_subnet_id,
+      default_node_pool[0].name,
 
       # Azure-managed identity defaults
       identity[0].identity_ids,
+
+      # Linux profile set by Azure CLI during cluster creation
+      linux_profile,
     ]
   }
 }

@@ -1,6 +1,6 @@
 import {
   to = module.aks.azurerm_kubernetes_cluster.aks
-  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd/providers/Microsoft.ContainerService/managedClusters/aks-ytsumm-prd"
+  id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd-ci/providers/Microsoft.ContainerService/managedClusters/aks-ytsumm-prd-ci"
 }
 
 module "aks" {

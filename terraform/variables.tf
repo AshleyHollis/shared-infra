@@ -6,7 +6,7 @@ variable "subscription_id" {
 variable "location" {
   description = "Azure region for resources"
   type        = string
-  default     = "eastasia"
+  default     = "centralindia"
 }
 
 variable "kubernetes_version" {
