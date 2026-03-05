@@ -33,16 +33,6 @@ variable "acr_sku" {
   default     = "Basic"
 }
 
-variable "squad_teams_bot_app_id" {
-  description = "App ID for the Squad Teams bot (Entra app in M365 dev tenant)"
-  type        = string
-}
-
-variable "squad_teams_bot_tenant_id" {
-  description = "Tenant ID where the Squad Teams bot Entra app is registered (M365 dev tenant)"
-  type        = string
-}
-
 variable "key_vault_secrets_officer_principal_id" {
   description = "Principal ID with Key Vault Secrets Officer access"
   type        = string
