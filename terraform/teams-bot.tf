@@ -8,6 +8,10 @@
 resource "azuread_application" "squad_teams_bot" {
   display_name     = "squad-teams-bot"
   sign_in_audience = "AzureADandPersonalMicrosoftAccount"
+
+  api {
+    requested_access_token_version = 2
+  }
 }
 
 resource "azuread_application_password" "squad_teams_bot" {
