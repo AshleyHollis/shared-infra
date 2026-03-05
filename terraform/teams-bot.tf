@@ -5,13 +5,11 @@
 # One bot serves all project channels; only TEAMS_CHANNEL_ID differs per repo.
 
 # Entra ID Application for Squad Teams Bot
+data "azuread_client_config" "current" {}
+
 resource "azuread_application" "squad_teams_bot" {
   display_name     = "squad-teams-bot"
-  sign_in_audience = "AzureADandPersonalMicrosoftAccount"
-
-  api {
-    requested_access_token_version = 2
-  }
+  sign_in_audience = "AzureADMyOrg"
 }
 
 resource "azuread_application_password" "squad_teams_bot" {
@@ -26,9 +24,10 @@ resource "azurerm_bot_service_azure_bot" "squad" {
   resource_group_name = azurerm_resource_group.main.name
   location            = "global"
   sku                 = "F0"
-  microsoft_app_id    = azuread_application.squad_teams_bot.client_id
-  microsoft_app_type  = "MultiTenant"
-  tags                = local.common_tags
+  microsoft_app_id        = azuread_application.squad_teams_bot.client_id
+  microsoft_app_type      = "SingleTenant"
+  microsoft_app_tenant_id = data.azuread_client_config.current.tenant_id
+  tags                    = local.common_tags
 }
 
 # Enable Teams channel on the bot
