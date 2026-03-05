@@ -186,6 +186,7 @@ echo "[INFO] ⏳ Analyzing files for build/deployment triggers..."
 
 HAS_IMAGE_BUILD=false
 HAS_DEPLOYMENT=false
+HAS_BACKEND_DEPLOYMENT=false
 SKIP_COUNT=0
 BUILD_COUNT=0
 DEPLOY_COUNT=0
