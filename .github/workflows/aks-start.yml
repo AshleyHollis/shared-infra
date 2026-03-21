@@ -1,0 +1,64 @@
+name: Start AKS Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Azure resource group'
+        required: false
+        default: 'rg-ytsumm-prd-ci'
+      cluster_name:
+        description: 'AKS cluster name'
+        required: false
+        default: 'aks-ytsumm-prd-ci'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  start-aks:
+    name: Start AKS Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Check current cluster state
+        id: check-state
+        run: |
+          state=$(az aks show \
+            --name "${{ inputs.cluster_name }}" \
+            --resource-group "${{ inputs.resource_group }}" \
+            --query "powerState.code" -o tsv 2>/dev/null || echo "Unknown")
+          echo "Current state: $state"
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+
+      - name: Start AKS cluster
+        if: steps.check-state.outputs.state != 'Running'
+        run: |
+          echo "Starting cluster ${{ inputs.cluster_name }} in ${{ inputs.resource_group }}..."
+          az aks start \
+            --name "${{ inputs.cluster_name }}" \
+            --resource-group "${{ inputs.resource_group }}"
+          echo "Cluster started."
+
+      - name: Cluster already running
+        if: steps.check-state.outputs.state == 'Running'
+        run: echo "Cluster is already Running — nothing to do."
+
+      - name: Verify final state
+        run: |
+          state=$(az aks show \
+            --name "${{ inputs.cluster_name }}" \
+            --resource-group "${{ inputs.resource_group }}" \
+            --query "powerState.code" -o tsv)
+          echo "Final state: $state"
+          if [ "$state" != "Running" ]; then
+            echo "ERROR: expected Running, got $state"
+            exit 1
+          fi
