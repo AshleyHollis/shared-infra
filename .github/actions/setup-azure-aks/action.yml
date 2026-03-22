@@ -14,11 +14,11 @@ inputs:
   resource-group:
     description: Azure resource group (uses default if not provided)
     required: false
-    default: 'rg-ytsumm-prd'
+    default: 'rg-ytsumm-prd-ci'
   cluster-name:
     description: AKS cluster name (uses default if not provided)
     required: false
-    default: 'aks-ytsumm-prd'
+    default: 'aks-ytsumm-prd-ci'
 
 runs:
   using: composite
