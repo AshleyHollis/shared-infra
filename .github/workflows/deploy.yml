@@ -228,9 +228,26 @@ jobs:
       - name: Validate K8s manifests (dry-run)
         if: github.event_name == 'pull_request'
         run: |
-          echo "=== Dry-run: Validating K8s manifests ==="
-          kubectl apply --dry-run=server -f k8s/argocd/repo-secret.yaml
-          kubectl apply --dry-run=server -f k8s/argocd/infra-apps.yaml
+          echo "=== Rendering K8s manifests without live cluster dependency ==="
+          cat > k8s/argocd/kustomization.yaml <<'EOF'
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          resources:
+            - repo-secret.yaml
+            - infra-apps.yaml
+          EOF
+          kubectl kustomize k8s/argocd >/dev/null
+
+          cat > k8s/argocd/kustomization.yaml <<'EOF'
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          resources:
+            - infra-apps-openclaw.yaml
+          EOF
+          kubectl kustomize k8s/argocd >/dev/null
+          kubectl kustomize k8s/argocd/gateway-api-openclaw >/dev/null
+          kubectl kustomize k8s/argocd/cloudflare-tunnel >/dev/null
+          kubectl kustomize k8s/cluster-resources-openclaw >/dev/null
           echo "✅ All manifests are valid"
 
       # On push/dispatch, actually deploy
