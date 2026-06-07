@@ -208,12 +208,18 @@ jobs:
     name: Deploy K8s Infrastructure
     runs-on: ubuntu-latest
     needs: [terraform-plan, terraform-apply]
-    # Run after terraform stages complete (apply may be skipped if no changes)
+    # Run after terraform stages complete (apply may be skipped if no changes).
+    # PRs always render manifests only. Pushes deploy to AKS unless the repo is
+    # configured for the OpenClaw target; OpenClaw clusters pull via Argo CD.
     if: |
       always() &&
       needs.terraform-plan.result == 'success' &&
       (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped') &&
-      (github.event_name != 'workflow_dispatch' || inputs.k8s_target == 'aks')
+      (
+        github.event_name == 'pull_request' ||
+        (github.event_name == 'push' && vars.K8S_TARGET != 'openclaw') ||
+        (github.event_name == 'workflow_dispatch' && inputs.k8s_target == 'aks')
+      )
     steps:
       - uses: actions/checkout@v4
 
