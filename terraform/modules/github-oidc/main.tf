@@ -34,6 +34,10 @@ resource "azuread_application" "github_actions" {
 
   # Convert map tags to set of strings for Azure AD
   tags = [for k, v in var.tags : "${k}:${v}"]
+
+  lifecycle {
+    ignore_changes = [owners]
+  }
 }
 
 # -----------------------------------------------------------------------------
@@ -45,6 +49,10 @@ resource "azuread_service_principal" "github_actions" {
   owners    = [data.azurerm_client_config.current.object_id]
 
   # Note: tags are inherited from the application
+
+  lifecycle {
+    ignore_changes = [owners]
+  }
 }
 
 # -----------------------------------------------------------------------------

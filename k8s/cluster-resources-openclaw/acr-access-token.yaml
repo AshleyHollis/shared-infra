@@ -1,0 +1,19 @@
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ACRAccessToken
+metadata:
+  name: ytsumm-acr-pull
+  namespace: external-secrets
+  labels:
+    app.kubernetes.io/name: yt-summarizer
+    app.kubernetes.io/component: image-pull
+spec:
+  tenantId: c2d723a2-474e-44d2-a37c-9b4e9cb823d4
+  registry: acrytsummprdci.azurecr.io
+  environmentType: PublicCloud
+  auth:
+    workloadIdentity:
+      serviceAccountRef:
+        name: azure-keyvault-reader
+        namespace: external-secrets
+        audiences:
+          - api://AzureADTokenExchange

@@ -72,6 +72,7 @@ fi
 OVERLAY_DIR="k8s/overlays/preview-pr-${PR_NUMBER}"
 OVERLAY_FILE="${OVERLAY_DIR}/kustomization.yaml"
 BASE_OVERLAY_DIR="k8s/overlays/preview"
+TEMPLATE_PATH="${TEMPLATE_PATH:-scripts/ci/templates/preview-kustomization-template.yaml}"
 
 print_header "Update Preview Overlay" \
   "PR Number: #${PR_NUMBER}" \
@@ -98,7 +99,7 @@ fi
 log_step "⏳ Generating preview kustomization..."
 
 bash scripts/ci/generate_preview_kustomization.sh \
-  --template scripts/ci/templates/preview-kustomization-template.yaml \
+  --template "${TEMPLATE_PATH}" \
   --output "${OVERLAY_FILE}" \
   --pr-number "${PR_NUMBER}" \
   --image-tag "${IMAGE_TAG}" \

@@ -47,6 +47,10 @@ inputs:
     description: 'Path to kustomization template (for prod)'
     required: false
     default: 'scripts/ci/templates/prod-kustomization-template.yaml'
+  preview-template-path:
+    description: 'Path to preview kustomization template'
+    required: false
+    default: 'scripts/ci/templates/preview-kustomization-template.yaml'
 
   # Commit-specific inputs
   file-path:
@@ -98,6 +102,7 @@ runs:
         TLS_SECRET: ${{ inputs.tls-secret }}
         PREVIEW_URL: ${{ inputs.preview-url }}
         COMMIT_SHA: ${{ inputs.commit-sha }}
+        TEMPLATE_PATH: ${{ inputs.preview-template-path }}
         OVERLAY_PATH: k8s/overlays/preview-pr-${{ inputs.pr-number }}
       run: |
         # Validate inputs

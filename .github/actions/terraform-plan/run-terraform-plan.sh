@@ -2,6 +2,8 @@
 # Purpose: Runs terraform plan and captures output for PR comments
 # Inputs: Passed via working directory and environment variables
 #   SUBSCRIPTION_ID, SQL_ADMIN_PASSWORD, OPENAI_API_KEY, CLOUDFLARE_API_TOKEN,
+#   CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID, ENABLE_OPENCLAW_TUNNEL,
+#   OPENCLAW_ARC_OIDC_ISSUER_URL,
 #   AUTH0_DOMAIN (optional), AUTH0_CLIENT_ID (optional)
 # Outputs:
 #   plan_output: Raw terraform plan output
@@ -22,6 +24,10 @@ TF_ARGS=(-no-color -input=false -out=tfplan)
 [[ -n "$SQL_ADMIN_PASSWORD" ]]   && TF_ARGS+=(-var="sql_admin_password=${SQL_ADMIN_PASSWORD}")
 [[ -n "$OPENAI_API_KEY" ]]      && TF_ARGS+=(-var="openai_api_key=${OPENAI_API_KEY}")
 [[ -n "$CLOUDFLARE_API_TOKEN" ]] && TF_ARGS+=(-var="cloudflare_api_token=${CLOUDFLARE_API_TOKEN}")
+[[ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ]] && TF_ARGS+=(-var="cloudflare_account_id=${CLOUDFLARE_ACCOUNT_ID}")
+[[ -n "${CLOUDFLARE_ZONE_ID:-}" ]] && TF_ARGS+=(-var="cloudflare_zone_id=${CLOUDFLARE_ZONE_ID}")
+[[ -n "${ENABLE_OPENCLAW_TUNNEL:-}" ]] && TF_ARGS+=(-var="enable_openclaw_tunnel=${ENABLE_OPENCLAW_TUNNEL}")
+[[ -n "${OPENCLAW_ARC_OIDC_ISSUER_URL:-}" ]] && TF_ARGS+=(-var="openclaw_arc_oidc_issuer_url=${OPENCLAW_ARC_OIDC_ISSUER_URL}")
 [[ -n "$AUTH0_DOMAIN" ]]         && TF_ARGS+=(-var="auth0_domain=${AUTH0_DOMAIN}")
 [[ -n "$AUTH0_CLIENT_ID" ]]      && TF_ARGS+=(-var="auth0_terraform_client_id=${AUTH0_CLIENT_ID}")
 

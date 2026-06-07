@@ -31,6 +31,34 @@ on:
         required: false
         type: boolean
         default: false
+      k8s_target:
+        description: 'Kubernetes target for post-Terraform deploy steps'
+        required: false
+        type: choice
+        options:
+          - aks
+          - openclaw
+        default: aks
+      enable_openclaw_tunnel:
+        description: 'Manage OpenClaw Cloudflare Tunnel resources'
+        required: false
+        type: boolean
+        default: false
+      openclaw_arc_oidc_issuer_url:
+        description: 'Azure Arc OIDC issuer URL for OpenClaw K3s'
+        required: false
+        type: string
+        default: ''
+      cloudflare_account_id:
+        description: 'Cloudflare account ID override; falls back to repository variable'
+        required: false
+        type: string
+        default: ''
+      cloudflare_zone_id:
+        description: 'Cloudflare zone ID override; falls back to repository variable'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   id-token: write
@@ -70,12 +98,32 @@ jobs:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Load Cloudflare API token from Key Vault
+        id: cloudflare-token
+        if: |
+          (github.event_name == 'workflow_dispatch' && inputs.enable_openclaw_tunnel == true) ||
+          vars.ENABLE_OPENCLAW_TUNNEL == 'true'
+        shell: bash
+        run: |
+          token="$(az keyvault secret show \
+            --vault-name "${{ vars.KEY_VAULT_NAME || 'kv-ytsumm-prd-ci' }}" \
+            --name cloudflare-api-token \
+            --query value \
+            --output tsv)"
+          echo "::add-mask::${token}"
+          echo "token=${token}" >> "$GITHUB_OUTPUT"
+
       - name: Terraform Plan
         id: plan
         uses: ./.github/actions/terraform-plan
         with:
           working-directory: terraform
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          cloudflare-api-token: ${{ steps.cloudflare-token.outputs.token }}
+          cloudflare-account-id: ${{ (github.event_name == 'workflow_dispatch' && inputs.cloudflare_account_id != '' && inputs.cloudflare_account_id) || vars.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-zone-id: ${{ (github.event_name == 'workflow_dispatch' && inputs.cloudflare_zone_id != '' && inputs.cloudflare_zone_id) || vars.CLOUDFLARE_ZONE_ID }}
+          enable-openclaw-tunnel: ${{ (github.event_name == 'workflow_dispatch' && inputs.enable_openclaw_tunnel == true && 'true') || vars.ENABLE_OPENCLAW_TUNNEL }}
+          openclaw-arc-oidc-issuer-url: ${{ (github.event_name == 'workflow_dispatch' && inputs.openclaw_arc_oidc_issuer_url != '' && inputs.openclaw_arc_oidc_issuer_url) || vars.OPENCLAW_ARC_OIDC_ISSUER_URL }}
         continue-on-error: ${{ github.event_name == 'pull_request' }}
 
       - name: Parse plan summary
@@ -164,7 +212,8 @@ jobs:
     if: |
       always() &&
       needs.terraform-plan.result == 'success' &&
-      (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped')
+      (needs.terraform-apply.result == 'success' || needs.terraform-apply.result == 'skipped') &&
+      (github.event_name != 'workflow_dispatch' || inputs.k8s_target == 'aks')
     steps:
       - uses: actions/checkout@v4
 
@@ -179,9 +228,26 @@ jobs:
       - name: Validate K8s manifests (dry-run)
         if: github.event_name == 'pull_request'
         run: |
-          echo "=== Dry-run: Validating K8s manifests ==="
-          kubectl apply --dry-run=server -f k8s/argocd/repo-secret.yaml
-          kubectl apply --dry-run=server -f k8s/argocd/infra-apps.yaml
+          echo "=== Rendering K8s manifests without live cluster dependency ==="
+          cat > k8s/argocd/kustomization.yaml <<'EOF'
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          resources:
+            - repo-secret.yaml
+            - infra-apps.yaml
+          EOF
+          kubectl kustomize k8s/argocd >/dev/null
+
+          cat > k8s/argocd/kustomization.yaml <<'EOF'
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+          resources:
+            - infra-apps-openclaw.yaml
+          EOF
+          kubectl kustomize k8s/argocd >/dev/null
+          kubectl kustomize k8s/argocd/gateway-api-openclaw >/dev/null
+          kubectl kustomize k8s/argocd/cloudflare-tunnel >/dev/null
+          kubectl kustomize k8s/cluster-resources-openclaw >/dev/null
           echo "✅ All manifests are valid"
 
       # On push/dispatch, actually deploy

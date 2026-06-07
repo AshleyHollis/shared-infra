@@ -16,3 +16,7 @@ provider "azurerm" {
 provider "azuread" {
   use_oidc = true
 }
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}

@@ -38,3 +38,44 @@ variable "key_vault_secrets_officer_principal_id" {
   type        = string
   default     = "eac9556a-cd81-431f-a1ec-d6940b2d92d3"
 }
+
+variable "cloudflare_account_id" {
+  description = "Cloudflare account ID used when OpenClaw tunnel management is enabled"
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "cloudflare_api_token" {
+  description = "Cloudflare API token with Cloudflare Tunnel and DNS edit permissions"
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone ID for ashleyhollis.com"
+  type        = string
+  default     = null
+}
+
+variable "enable_openclaw_tunnel" {
+  description = "Create the OpenClaw Cloudflare Tunnel, DNS records, tunnel config, and Key Vault token secret"
+  type        = bool
+  default     = false
+}
+
+variable "openclaw_arc_oidc_issuer_url" {
+  description = "OIDC issuer URL for the Azure Arc-enabled OpenClaw K3s cluster"
+  type        = string
+  default     = null
+}
+
+variable "openclaw_tunnel_ingress" {
+  description = "Public hostnames and internal services routed through the OpenClaw Cloudflare Tunnel"
+  type        = map(string)
+  default = {
+    "*.yt-summarizer.apps.ashleyhollis.com"   = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
+    "api.yt-summarizer.apps.ashleyhollis.com" = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
+  }
+}
