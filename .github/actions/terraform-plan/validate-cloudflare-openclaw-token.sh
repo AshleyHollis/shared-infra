@@ -59,10 +59,6 @@ cloudflare_get() {
 }
 
 cloudflare_get \
-  "read account ${CLOUDFLARE_ACCOUNT_ID}" \
-  "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}"
-
-cloudflare_get \
   "list Cloudflare tunnels for account ${CLOUDFLARE_ACCOUNT_ID}" \
   "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/cfd_tunnel?is_deleted=false&per_page=1"
 
@@ -70,4 +66,4 @@ cloudflare_get \
   "list DNS records for zone ${CLOUDFLARE_ZONE_ID}" \
   "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records?per_page=1"
 
-echo "Cloudflare token has the account, tunnel, and DNS read access required for OpenClaw tunnel planning."
+echo "Cloudflare token has the tunnel and DNS read access required for OpenClaw tunnel planning."

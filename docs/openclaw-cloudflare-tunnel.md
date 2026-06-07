@@ -82,13 +82,13 @@ exit $exitCode
 Expected success:
 
 ```text
-Cloudflare token has the account, tunnel, and DNS read access required for OpenClaw tunnel planning.
+Cloudflare token has the tunnel and DNS read access required for OpenClaw tunnel planning.
 ```
 
 Known insufficient-token failures:
 
-- `Cloudflare token cannot read account ... code 9109: Unauthorized to access requested resource`
 - `Cloudflare token cannot list Cloudflare tunnels ... code 10000: Authentication error`
+- `Cloudflare token cannot list DNS records ... code 9109: Unauthorized to access requested resource`
 
 ## Activation Sequence
 
