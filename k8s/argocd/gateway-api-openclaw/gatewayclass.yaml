@@ -4,4 +4,4 @@ metadata:
   name: nginx
 spec:
   controllerName: gateway.nginx.org/nginx-gateway-controller
-  description: NGINX Gateway Fabric controller for OpenClaw-hosted yt-summarizer
+  description: NGINX Gateway Fabric for OpenClaw
