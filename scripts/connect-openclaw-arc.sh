@@ -51,4 +51,8 @@ Use this for the shared-infra Terraform apply:
 TF_VAR_openclaw_arc_oidc_issuer_url=${OIDC_ISSUER_URL}
 TF_VAR_enable_openclaw_tunnel=true
 
+Then configure K3s service account tokens to use the Arc issuer:
+
+OPENCLAW_ARC_OIDC_ISSUER_URL=${OIDC_ISSUER_URL} scripts/configure-openclaw-workload-identity.sh
+
 EOF

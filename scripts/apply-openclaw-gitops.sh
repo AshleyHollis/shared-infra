@@ -5,7 +5,8 @@ set -euo pipefail
 # desired state from Git. Run after:
 # 1. scripts/bootstrap-openclaw-k3s.sh
 # 2. scripts/connect-openclaw-arc.sh
-# 3. shared-infra Terraform apply with enable_openclaw_tunnel=true
+# 3. scripts/configure-openclaw-workload-identity.sh
+# 4. shared-infra Terraform apply with enable_openclaw_tunnel=true
 
 KUBECONFIG="${KUBECONFIG:-/etc/rancher/k3s/k3s.yaml}"
 SHARED_INFRA_DIR="${SHARED_INFRA_DIR:-/home/openclaw/dev/shared-infra}"
