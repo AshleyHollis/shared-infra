@@ -120,3 +120,10 @@ the OpenClaw workload is healthy. At cutover, remove or replace that exact AKS
 record so the hostname resolves through the OpenClaw tunnel. The wildcard
 `*.yt-summarizer.apps.ashleyhollis.com` CNAME already covers the API hostname
 once the exact record no longer exists.
+
+## OpenClaw Canary Host
+
+Terraform also creates `api-openclaw.ashleyhollis.com` as a proxied Cloudflare
+Tunnel CNAME. This first-level hostname is for smoke testing the OpenClaw API
+before production cutover because it is covered by Cloudflare Universal SSL.
+It should stay separate from the production API DNS record until cutover.

@@ -75,6 +75,7 @@ variable "openclaw_tunnel_ingress" {
   description = "Public hostnames and internal services routed through the OpenClaw Cloudflare Tunnel"
   type        = map(string)
   default = {
+    "api-openclaw.ashleyhollis.com"           = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "*.yt-summarizer.apps.ashleyhollis.com"   = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "api.yt-summarizer.apps.ashleyhollis.com" = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
   }
@@ -84,6 +85,7 @@ variable "openclaw_tunnel_dns_hostnames" {
   description = "Public hostnames that receive Cloudflare DNS records for the OpenClaw tunnel"
   type        = set(string)
   default = [
+    "api-openclaw.ashleyhollis.com",
     "*.yt-summarizer.apps.ashleyhollis.com",
   ]
 }

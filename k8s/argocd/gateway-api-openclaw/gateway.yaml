@@ -10,6 +10,13 @@ metadata:
 spec:
   gatewayClassName: nginx
   listeners:
+    - name: http-yt-summarizer-canary
+      port: 80
+      protocol: HTTP
+      hostname: "api-openclaw.ashleyhollis.com"
+      allowedRoutes:
+        namespaces:
+          from: All
     - name: http-yt-summarizer
       port: 80
       protocol: HTTP
