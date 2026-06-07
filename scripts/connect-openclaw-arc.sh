@@ -5,6 +5,7 @@ set -euo pipefail
 # Prerequisites:
 # - K3s is installed and running.
 # - Azure CLI is authenticated with permission to create Arc-enabled Kubernetes resources.
+# - KUBECONFIG points to a readable kubeconfig for the K3s cluster.
 # - Required providers are registered in the subscription.
 
 ARC_CLUSTER_NAME="${ARC_CLUSTER_NAME:-openclaw-ytsumm-prd}"
@@ -12,8 +13,9 @@ AZURE_RESOURCE_GROUP="${AZURE_RESOURCE_GROUP:-rg-ytsumm-prd-ci}"
 AZURE_LOCATION="${AZURE_LOCATION:-centralindia}"
 KUBECONFIG="${KUBECONFIG:-/etc/rancher/k3s/k3s.yaml}"
 
-if [[ "$(id -u)" -ne 0 ]]; then
-  echo "Run this script as root so it can read ${KUBECONFIG}." >&2
+if [[ ! -r "${KUBECONFIG}" ]]; then
+  echo "KUBECONFIG is not readable: ${KUBECONFIG}" >&2
+  echo "Run as root on the VPS or set KUBECONFIG to a readable local copy." >&2
   exit 1
 fi
 
