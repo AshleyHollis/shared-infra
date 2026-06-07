@@ -14,6 +14,10 @@ terraform/          # Shared Azure infrastructure (AKS, ACR, Key Vault, OIDC, wo
 scripts/            # Bootstrap and sync scripts (backend init, ArgoCD manifest sync)
 ```
 
+## Operations
+
+- [OpenClaw Cloudflare Tunnel Runbook](docs/openclaw-cloudflare-tunnel.md)
+
 ## Usage
 
 Consumer repos reference shared actions and workflows via:
