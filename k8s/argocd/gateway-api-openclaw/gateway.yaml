@@ -24,6 +24,13 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: http-yt-summarizer-preview
+      port: 80
+      protocol: HTTP
+      hostname: "*.ashleyhollis.com"
+      allowedRoutes:
+        namespaces:
+          from: All
     - name: http-yt-summarizer
       port: 80
       protocol: HTTP
