@@ -6,6 +6,7 @@ set -euo pipefail
 
 K3S_CHANNEL="${K3S_CHANNEL:-stable}"
 K3S_KUBECONFIG_MODE="${K3S_KUBECONFIG_MODE:-600}"
+K3S_TLS_SAN="${K3S_TLS_SAN:-}"
 ARGOCD_VERSION="${ARGOCD_VERSION:-v2.14.8}"
 TAILSCALE_INTERFACE="${TAILSCALE_INTERFACE:-tailscale0}"
 
@@ -17,15 +18,37 @@ require_root() {
 }
 
 install_k3s() {
+  local install_args=(
+    server
+    --disable traefik
+    --disable servicelb
+    --write-kubeconfig-mode "${K3S_KUBECONFIG_MODE}"
+  )
+
+  if [[ -n "${K3S_TLS_SAN}" ]]; then
+    install_args+=(--tls-san "${K3S_TLS_SAN}")
+  fi
+
   if command -v k3s >/dev/null 2>&1; then
     echo "K3s is already installed."
+    if [[ -n "${K3S_TLS_SAN}" ]] \
+      && [[ -f /etc/systemd/system/k3s.service ]] \
+      && ! grep -Fq "${K3S_TLS_SAN}" /etc/systemd/system/k3s.service; then
+      echo "K3s TLS SAN ${K3S_TLS_SAN} is not configured in the existing service." >&2
+    fi
     return
   fi
 
-  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${K3S_CHANNEL}" sh -s - server \
-    --disable traefik \
-    --disable servicelb \
-    --write-kubeconfig-mode "${K3S_KUBECONFIG_MODE}"
+  curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${K3S_CHANNEL}" sh -s - \
+    "${install_args[@]}"
+}
+
+detect_k3s_tls_san() {
+  if [[ -n "${K3S_TLS_SAN}" ]] || ! command -v tailscale >/dev/null 2>&1; then
+    return
+  fi
+
+  K3S_TLS_SAN="$(tailscale ip -4 2>/dev/null | head -n 1 || true)"
 }
 
 install_tools() {
@@ -56,6 +79,7 @@ install_argocd() {
 }
 
 require_root
+detect_k3s_tls_san
 install_k3s
 install_tools
 configure_firewall
