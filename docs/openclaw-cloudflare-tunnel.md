@@ -69,8 +69,14 @@ $env:CLOUDFLARE_API_TOKEN = az keyvault secret show `
   --output tsv
 
 bash .github/actions/terraform-plan/validate-cloudflare-openclaw-token.sh
+$exitCode = $LASTEXITCODE
 
-Remove-Item Env:\CLOUDFLARE_API_TOKEN
+Remove-Item Env:\CLOUDFLARE_API_TOKEN -ErrorAction SilentlyContinue
+Remove-Item Env:\ENABLE_OPENCLAW_TUNNEL -ErrorAction SilentlyContinue
+Remove-Item Env:\CLOUDFLARE_ACCOUNT_ID -ErrorAction SilentlyContinue
+Remove-Item Env:\CLOUDFLARE_ZONE_ID -ErrorAction SilentlyContinue
+
+exit $exitCode
 ```
 
 Expected success:
