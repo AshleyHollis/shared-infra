@@ -10,5 +10,9 @@ terraform {
       source  = "hashicorp/azuread"
       version = ">= 3.7.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = ">= 5.8.2"
+    }
   }
 }

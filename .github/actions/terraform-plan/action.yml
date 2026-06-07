@@ -19,6 +19,22 @@ inputs:
     description: 'Cloudflare API token'
     required: false
     default: ''
+  cloudflare-account-id:
+    description: 'Cloudflare account ID'
+    required: false
+    default: ''
+  cloudflare-zone-id:
+    description: 'Cloudflare zone ID'
+    required: false
+    default: ''
+  enable-openclaw-tunnel:
+    description: 'Whether to manage OpenClaw Cloudflare Tunnel resources'
+    required: false
+    default: ''
+  openclaw-arc-oidc-issuer-url:
+    description: 'Azure Arc OIDC issuer URL for the OpenClaw K3s cluster'
+    required: false
+    default: ''
 outputs:
   plan_output:
     description: 'Raw terraform plan output'
@@ -49,6 +65,10 @@ runs:
         SQL_ADMIN_PASSWORD: ${{ inputs.sql-admin-password }}
         OPENAI_API_KEY: ${{ inputs.openai-api-key }}
         CLOUDFLARE_API_TOKEN: ${{ inputs.cloudflare-api-token }}
+        CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare-account-id }}
+        CLOUDFLARE_ZONE_ID: ${{ inputs.cloudflare-zone-id }}
+        ENABLE_OPENCLAW_TUNNEL: ${{ inputs.enable-openclaw-tunnel }}
+        OPENCLAW_ARC_OIDC_ISSUER_URL: ${{ inputs.openclaw-arc-oidc-issuer-url }}
         AUTH0_DOMAIN: ${{ env.AUTH0_DOMAIN }}
       run: ${{ github.action_path }}/run-terraform-plan.sh
 

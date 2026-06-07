@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace-external-secrets.yaml
+  - serviceaccount-azure-keyvault-reader.yaml
+  - cluster-secretstore.yaml
+  - acr-access-token.yaml
+  - externalsecret-acr-pull-source.yaml
+  - rbac-acr-source-reader.yaml
+  - cluster-secretstore-acr-source.yaml
+  - clusterexternalsecret-acr-pull.yaml

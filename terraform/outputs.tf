@@ -92,3 +92,13 @@ output "workload_identity_client_id" {
   description = "Client ID for External Secrets Workload Identity"
   value       = azurerm_user_assigned_identity.external_secrets.client_id
 }
+
+output "openclaw_cloudflare_tunnel_id" {
+  description = "Cloudflare Tunnel ID for the OpenClaw VPS workload ingress"
+  value       = try(cloudflare_zero_trust_tunnel_cloudflared.openclaw[0].id, null)
+}
+
+output "openclaw_external_secrets_subject" {
+  description = "Federated workload identity subject used by External Secrets on OpenClaw"
+  value       = "system:serviceaccount:external-secrets:azure-keyvault-reader"
+}

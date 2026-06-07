@@ -12,6 +12,12 @@ module "key_vault" {
   tags = local.common_tags
 }
 
+resource "azurerm_role_assignment" "github_oidc_key_vault_secrets_user" {
+  scope                = module.key_vault.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = module.github_oidc.service_principal_object_id
+}
+
 import {
   to = module.key_vault.azurerm_key_vault.vault
   id = "/subscriptions/28aefbe7-e2af-4b4a-9ce1-92d6672c31bd/resourceGroups/rg-ytsumm-prd-ci/providers/Microsoft.KeyVault/vaults/kv-ytsumm-prd-ci"

@@ -92,3 +92,13 @@ output "workload_identity_client_id" {
   description = "Client ID of the workload identity for external secrets"
   value       = data.terraform_remote_state.shared_infra.outputs.workload_identity_client_id
 }
+
+output "openclaw_cloudflare_tunnel_id" {
+  description = "Cloudflare Tunnel ID for the OpenClaw VPS workload ingress"
+  value       = try(data.terraform_remote_state.shared_infra.outputs.openclaw_cloudflare_tunnel_id, null)
+}
+
+output "openclaw_external_secrets_subject" {
+  description = "Federated workload identity subject used by External Secrets on OpenClaw"
+  value       = try(data.terraform_remote_state.shared_infra.outputs.openclaw_external_secrets_subject, null)
+}
