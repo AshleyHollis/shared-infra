@@ -17,12 +17,14 @@ on:
     paths:
       - 'terraform/**'
       - 'k8s/**'
+      - '.github/actions/**'
       - '.github/workflows/deploy.yml'
   push:
     branches: [main]
     paths:
       - 'terraform/**'
       - 'k8s/**'
+      - '.github/actions/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
     inputs:

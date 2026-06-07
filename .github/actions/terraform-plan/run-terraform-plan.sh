@@ -18,6 +18,10 @@
 
 set -eo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+"${SCRIPT_DIR}/validate-cloudflare-openclaw-token.sh"
+
 # Build terraform plan args - only pass vars when set to avoid "undeclared variable" errors
 TF_ARGS=(-no-color -input=false -out=tfplan)
 [[ -n "$SUBSCRIPTION_ID" ]]     && TF_ARGS+=(-var="subscription_id=${SUBSCRIPTION_ID}")
