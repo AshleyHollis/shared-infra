@@ -7,7 +7,7 @@ set -euo pipefail
 K3S_CHANNEL="${K3S_CHANNEL:-stable}"
 K3S_KUBECONFIG_MODE="${K3S_KUBECONFIG_MODE:-600}"
 K3S_TLS_SAN="${K3S_TLS_SAN:-}"
-ARGOCD_VERSION="${ARGOCD_VERSION:-v2.14.8}"
+ARGOCD_VERSION="${ARGOCD_VERSION:-v3.4.3}"
 TAILSCALE_INTERFACE="${TAILSCALE_INTERFACE:-tailscale0}"
 
 require_root() {
@@ -56,7 +56,8 @@ install_tools() {
     curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   fi
 
-  if ! command -v argocd >/dev/null 2>&1; then
+  if ! command -v argocd >/dev/null 2>&1 \
+    || ! argocd version --client --short 2>/dev/null | grep -Fq "${ARGOCD_VERSION}"; then
     curl -sSL -o /usr/local/bin/argocd \
       "https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64"
     chmod 0755 /usr/local/bin/argocd
@@ -74,7 +75,8 @@ configure_firewall() {
 install_argocd() {
   export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
   kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-  kubectl apply -n argocd -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
+  kubectl apply --server-side --force-conflicts -n argocd \
+    -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
   kubectl -n argocd rollout status deployment/argocd-server --timeout=300s
 }
 

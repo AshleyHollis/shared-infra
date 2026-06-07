@@ -18,6 +18,15 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   # -------------------------------------------------------------------------
+  # Ignore Kubernetes status fields during comparison
+  # -------------------------------------------------------------------------
+  # Controllers own status fields. Kubernetes 1.35 adds Deployment
+  # .status.terminatingReplicas, which older typed diff schemas can reject
+  # before per-resource ignore rules are applied.
+  resource.compareoptions: |
+    ignoreResourceStatusField: all
+
+  # -------------------------------------------------------------------------
   # Ignore differences for cert-manager ValidatingWebhookConfiguration
   # -------------------------------------------------------------------------
   # cert-manager's webhook creates/updates its own ValidatingWebhookConfiguration

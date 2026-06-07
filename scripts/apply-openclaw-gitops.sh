@@ -19,6 +19,7 @@ fi
 export KUBECONFIG
 
 kubectl -n argocd get deployment argocd-server >/dev/null
+kubectl apply -f "${SHARED_INFRA_DIR}/k8s/argocd/resource-customizations.yaml"
 kubectl apply -f "${SHARED_INFRA_DIR}/k8s/argocd/infra-apps-openclaw.yaml"
 kubectl apply -k "${YT_SUMMARIZER_DIR}/k8s/argocd/openclaw"
 

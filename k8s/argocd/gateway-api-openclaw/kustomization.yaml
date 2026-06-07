@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - gateway-crds.yaml
   - nginx-gateway-fabric.yaml
   - gatewayclass.yaml
   - gateway.yaml
