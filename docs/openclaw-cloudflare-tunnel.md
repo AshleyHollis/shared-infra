@@ -110,16 +110,27 @@ Keep `ENABLE_OPENCLAW_TUNNEL=false` until the token validation passes.
 
 ## Production API DNS Cutover
 
-The tunnel config includes `api.yt-summarizer.apps.ashleyhollis.com`, but
-Terraform intentionally creates only the wildcard tunnel DNS record by default.
-The exact production API hostname may already have an `A` record pointing at the
-current AKS gateway, and Cloudflare prefers exact records over wildcard records.
+The preferred OpenClaw production API hostname is
+`api-ytsummarizer.ashleyhollis.com`. This is a first-level hostname under
+`ashleyhollis.com`, so it stays within Cloudflare Universal SSL coverage while
+still routing through the OpenClaw tunnel.
 
-Leave the exact `api.yt-summarizer.apps.ashleyhollis.com` record in place until
-the OpenClaw workload is healthy. At cutover, remove or replace that exact AKS
-record so the hostname resolves through the OpenClaw tunnel. The wildcard
-`*.yt-summarizer.apps.ashleyhollis.com` CNAME already covers the API hostname
-once the exact record no longer exists.
+The tunnel config also includes `api.yt-summarizer.apps.ashleyhollis.com`, but
+that deeper hostname needs either a custom/advanced Cloudflare edge certificate
+or a different TLS strategy when routed through Cloudflare Tunnel. Leave its
+exact AKS `A` record in place until the application and frontend are explicitly
+cut over to the first-level OpenClaw hostname.
+
+At cutover:
+
+1. Point `yt-summarizer` production URL variables at
+   `https://api-ytsummarizer.ashleyhollis.com`.
+2. Deploy the OpenClaw production overlay so its HTTPRoute binds to the
+   `http-yt-summarizer-prod` Gateway listener.
+3. Update Auth0 callback/origin configuration if API-hosted auth flows still
+   depend on the production API hostname.
+4. Leave `api-openclaw.ashleyhollis.com` in place for smoke testing and rollback
+   validation.
 
 ## OpenClaw Canary Host
 

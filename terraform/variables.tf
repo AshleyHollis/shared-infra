@@ -76,6 +76,7 @@ variable "openclaw_tunnel_ingress" {
   type        = map(string)
   default = {
     "api-openclaw.ashleyhollis.com"           = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
+    "api-ytsummarizer.ashleyhollis.com"       = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "*.yt-summarizer.apps.ashleyhollis.com"   = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "api.yt-summarizer.apps.ashleyhollis.com" = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
   }
@@ -86,6 +87,7 @@ variable "openclaw_tunnel_dns_hostnames" {
   type        = set(string)
   default = [
     "api-openclaw.ashleyhollis.com",
+    "api-ytsummarizer.ashleyhollis.com",
     "*.yt-summarizer.apps.ashleyhollis.com",
   ]
 }
