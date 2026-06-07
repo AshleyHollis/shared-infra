@@ -100,10 +100,23 @@ Known insufficient-token failures:
 4. Set shared-infra repository variable `ENABLE_OPENCLAW_TUNNEL=true`.
 5. Run shared-infra `Deploy` with `run_apply=true`,
    `k8s_target=openclaw`, and `enable_openclaw_tunnel=true`.
-6. Confirm Terraform creates or updates the Cloudflare tunnel, DNS records,
-   tunnel config, and Key Vault secret `cloudflare-tunnel-token`.
+6. Confirm Terraform creates or updates the Cloudflare tunnel, wildcard DNS
+   record, tunnel config, and Key Vault secret `cloudflare-tunnel-token`.
 7. Refresh the OpenClaw `cloudflare-tunnel` Argo CD app and confirm cloudflared
    pods move to `Running`.
 8. Verify public hosts route through Cloudflare to the Gateway API routes.
 
 Keep `ENABLE_OPENCLAW_TUNNEL=false` until the token validation passes.
+
+## Production API DNS Cutover
+
+The tunnel config includes `api.yt-summarizer.apps.ashleyhollis.com`, but
+Terraform intentionally creates only the wildcard tunnel DNS record by default.
+The exact production API hostname may already have an `A` record pointing at the
+current AKS gateway, and Cloudflare prefers exact records over wildcard records.
+
+Leave the exact `api.yt-summarizer.apps.ashleyhollis.com` record in place until
+the OpenClaw workload is healthy. At cutover, remove or replace that exact AKS
+record so the hostname resolves through the OpenClaw tunnel. The wildcard
+`*.yt-summarizer.apps.ashleyhollis.com` CNAME already covers the API hostname
+once the exact record no longer exists.

@@ -79,3 +79,11 @@ variable "openclaw_tunnel_ingress" {
     "api.yt-summarizer.apps.ashleyhollis.com" = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
   }
 }
+
+variable "openclaw_tunnel_dns_hostnames" {
+  description = "Public hostnames that receive Cloudflare DNS records for the OpenClaw tunnel"
+  type        = set(string)
+  default = [
+    "*.yt-summarizer.apps.ashleyhollis.com",
+  ]
+}

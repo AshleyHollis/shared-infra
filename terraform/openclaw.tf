@@ -1,7 +1,7 @@
 locals {
   openclaw_tunnel_dns_records = {
-    for hostname, service in var.openclaw_tunnel_ingress :
-    trimsuffix(hostname, ".ashleyhollis.com") => service
+    for hostname in var.openclaw_tunnel_dns_hostnames :
+    trimsuffix(hostname, ".ashleyhollis.com") => hostname
   }
 }
 
