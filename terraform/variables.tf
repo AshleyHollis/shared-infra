@@ -87,7 +87,6 @@ variable "openclaw_tunnel_dns_hostnames" {
   description = "Public hostnames that receive Cloudflare DNS records for the OpenClaw tunnel"
   type        = set(string)
   default = [
-    "*.ashleyhollis.com",
     "api-openclaw.ashleyhollis.com",
     "api-ytsummarizer.ashleyhollis.com",
     "*.yt-summarizer.apps.ashleyhollis.com",
