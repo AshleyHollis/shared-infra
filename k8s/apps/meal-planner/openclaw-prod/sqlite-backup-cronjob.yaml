@@ -1,0 +1,164 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sqlite-backup
+  namespace: meal-planner
+  labels:
+    app.kubernetes.io/name: sqlite-backup
+    app.kubernetes.io/component: backup
+    app.kubernetes.io/part-of: meal-planner
+spec:
+  schedule: "17 2 * * *"
+  timeZone: Australia/Brisbane
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: sqlite-backup
+            app.kubernetes.io/component: backup
+            app.kubernetes.io/part-of: meal-planner
+        spec:
+          restartPolicy: Never
+          securityContext:
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            - name: snapshot
+              image: python:3.13-slim
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  python - <<'PY'
+                  import gzip
+                  import hashlib
+                  import json
+                  import os
+                  import sqlite3
+                  from datetime import UTC, datetime
+                  from pathlib import Path
+
+                  source_path = Path("/data/inventory.sqlite")
+                  backup_dir = Path("/backup")
+                  raw_path = backup_dir / "inventory.sqlite"
+                  gz_path = backup_dir / "inventory.sqlite.gz"
+                  metadata_path = backup_dir / "metadata.json"
+                  timestamp_path = backup_dir / "timestamp.txt"
+                  sha_path = backup_dir / "inventory.sqlite.gz.sha256"
+
+                  if not source_path.exists():
+                      raise SystemExit(f"source database does not exist: {source_path}")
+
+                  generated_at = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+                  backup_dir.mkdir(parents=True, exist_ok=True)
+
+                  source = sqlite3.connect(f"file:{source_path}?mode=ro", uri=True)
+                  target = sqlite3.connect(raw_path)
+                  try:
+                      source.backup(target)
+                  finally:
+                      target.close()
+                      source.close()
+
+                  with raw_path.open("rb") as source_file, gzip.open(gz_path, "wb", compresslevel=6) as gzip_file:
+                      for chunk in iter(lambda: source_file.read(1024 * 1024), b""):
+                          gzip_file.write(chunk)
+
+                  digest = hashlib.sha256()
+                  with gz_path.open("rb") as backup_file:
+                      for chunk in iter(lambda: backup_file.read(1024 * 1024), b""):
+                          digest.update(chunk)
+
+                  metadata = {
+                      "generated_at_utc": generated_at,
+                      "source_path": str(source_path),
+                      "source_size_bytes": source_path.stat().st_size,
+                      "backup_size_bytes": gz_path.stat().st_size,
+                      "sha256": digest.hexdigest(),
+                  }
+                  metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True), encoding="utf-8")
+                  timestamp_path.write_text(generated_at, encoding="utf-8")
+                  sha_path.write_text(digest.hexdigest(), encoding="utf-8")
+                  raw_path.unlink()
+                  print(json.dumps(metadata, sort_keys=True))
+                  PY
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                runAsNonRoot: true
+                runAsUser: 1000
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+                  readOnly: true
+                - name: backup
+                  mountPath: /backup
+          containers:
+            - name: upload
+              image: mcr.microsoft.com/azure-cli:2.81.0
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  timestamp="$(cat /backup/timestamp.txt)"
+                  sha256="$(cat /backup/inventory.sqlite.gz.sha256)"
+                  container="${BACKUP_CONTAINER_NAME:-meal-planner-backups}"
+                  blob_name="sqlite/inventory-${timestamp}.sqlite.gz"
+                  metadata_blob_name="sqlite/inventory-${timestamp}.metadata.json"
+
+                  az storage container create \
+                    --name "${container}" \
+                    --connection-string "${AZURE_STORAGE_CONNECTION_STRING}" \
+                    --output none
+
+                  az storage blob upload \
+                    --container-name "${container}" \
+                    --name "${blob_name}" \
+                    --file /backup/inventory.sqlite.gz \
+                    --connection-string "${AZURE_STORAGE_CONNECTION_STRING}" \
+                    --overwrite false \
+                    --metadata app=meal-planner source=sqlite generatedUtc="${timestamp}" sha256="${sha256}" \
+                    --output none
+
+                  az storage blob upload \
+                    --container-name "${container}" \
+                    --name "${metadata_blob_name}" \
+                    --file /backup/metadata.json \
+                    --connection-string "${AZURE_STORAGE_CONNECTION_STRING}" \
+                    --overwrite false \
+                    --metadata app=meal-planner source=sqlite generatedUtc="${timestamp}" \
+                    --output none
+
+                  echo "Uploaded ${blob_name} and ${metadata_blob_name} to ${container}."
+              env:
+                - name: AZURE_STORAGE_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      name: meal-planner-runtime
+                      key: AZURE_STORAGE_CONNECTION_STRING
+                - name: BACKUP_CONTAINER_NAME
+                  value: meal-planner-backups
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: backup
+                  mountPath: /backup
+          volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: meal-planner-data
+            - name: backup
+              emptyDir: {}

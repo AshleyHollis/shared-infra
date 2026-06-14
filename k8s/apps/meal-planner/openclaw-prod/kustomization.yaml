@@ -13,6 +13,7 @@ resources:
   - web-deployment.yaml
   - web-service.yaml
   - web-httproute.yaml
+  - sqlite-backup-cronjob.yaml
 
 labels:
   - pairs:
