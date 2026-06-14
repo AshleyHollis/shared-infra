@@ -26,7 +26,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: api
-          image: acrytsummprdci.azurecr.io/meal-planner-api:prod-20260614-181122-6af93718
+          image: acrytsummprdci.azurecr.io/meal-planner-api:prod-20260614-182940-85b5f480
           imagePullPolicy: Always
           ports:
             - name: http
@@ -58,6 +58,11 @@ spec:
                 secretKeyRef:
                   name: meal-planner-runtime
                   key: AUTH0_SESSION_SECRET
+            - name: MEAL_PLANNER_AUTH_ALLOWED_EMAILS
+              valueFrom:
+                secretKeyRef:
+                  name: meal-planner-runtime
+                  key: MEAL_PLANNER_AUTH_ALLOWED_EMAILS
             - name: OPENCLAW_APP_TOKEN
               valueFrom:
                 secretKeyRef:

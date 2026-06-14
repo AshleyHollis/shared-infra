@@ -12,3 +12,5 @@ data:
   AUTH0_ALLOWED_RETURN_ORIGINS: "https://meal-planner.ashleyhollis.com"
   AUTH0_SESSION_COOKIE_NAME: "meal_planner_session"
   AUTH0_SESSION_COOKIE_SAMESITE: "lax"
+  MEAL_PLANNER_AUTH_BOOTSTRAP_HOUSEHOLD_ID: "tank-home"
+  MEAL_PLANNER_AUTH_BOOTSTRAP_ROLE: "owner"
