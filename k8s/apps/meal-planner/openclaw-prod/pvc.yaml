@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: meal-planner-data
+  namespace: meal-planner
+  labels:
+    app.kubernetes.io/name: meal-planner
+    app.kubernetes.io/component: data
+    app.kubernetes.io/part-of: meal-planner
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi

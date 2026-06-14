@@ -24,6 +24,13 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: http-meal-planner-prod
+      port: 80
+      protocol: HTTP
+      hostname: "meal-planner.ashleyhollis.com"
+      allowedRoutes:
+        namespaces:
+          from: All
     - name: http-yt-summarizer-preview
       port: 80
       protocol: HTTP

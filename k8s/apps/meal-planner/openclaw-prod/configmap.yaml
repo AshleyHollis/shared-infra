@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meal-planner-config
+  namespace: meal-planner
+  labels:
+    app.kubernetes.io/name: meal-planner
+    app.kubernetes.io/part-of: meal-planner
+data:
+  API_BASE_URL: "http://api"
+  MEAL_PLANNER_DEV_USER_ID: "ashley-local"
+  MEAL_PLANNER_DEV_USER_EMAIL: "ashley@example.com"
+  MEAL_PLANNER_DEV_USER_NAME: "Ashley Hollis"
+  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_ID: "tank-home"
+  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_NAME: "Tank Home"
+  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_ROLE: "owner"
+  MEAL_PLANNER_DEV_HOUSEHOLDS: ""

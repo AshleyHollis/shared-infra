@@ -78,6 +78,7 @@ variable "openclaw_tunnel_ingress" {
     "*.ashleyhollis.com"                      = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "api-openclaw.ashleyhollis.com"           = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "api-ytsummarizer.ashleyhollis.com"       = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
+    "meal-planner.ashleyhollis.com"           = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "*.yt-summarizer.apps.ashleyhollis.com"   = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
     "api.yt-summarizer.apps.ashleyhollis.com" = "http://nginx-gateway-fabric.gateway-system.svc.cluster.local:80"
   }
@@ -89,6 +90,7 @@ variable "openclaw_tunnel_dns_hostnames" {
   default = [
     "api-openclaw.ashleyhollis.com",
     "api-ytsummarizer.ashleyhollis.com",
+    "meal-planner.ashleyhollis.com",
     "*.yt-summarizer.apps.ashleyhollis.com",
   ]
 }
