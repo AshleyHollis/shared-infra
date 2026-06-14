@@ -8,10 +8,7 @@ metadata:
     app.kubernetes.io/part-of: meal-planner
 data:
   API_BASE_URL: "http://api"
-  MEAL_PLANNER_DEV_USER_ID: "ashley-local"
-  MEAL_PLANNER_DEV_USER_EMAIL: "ashley@example.com"
-  MEAL_PLANNER_DEV_USER_NAME: "Ashley Hollis"
-  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_ID: "tank-home"
-  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_NAME: "Tank Home"
-  MEAL_PLANNER_DEV_ACTIVE_HOUSEHOLD_ROLE: "owner"
-  MEAL_PLANNER_DEV_HOUSEHOLDS: ""
+  AUTH0_DEFAULT_RETURN_TO: "https://meal-planner.ashleyhollis.com"
+  AUTH0_ALLOWED_RETURN_ORIGINS: "https://meal-planner.ashleyhollis.com"
+  AUTH0_SESSION_COOKIE_NAME: "meal_planner_session"
+  AUTH0_SESSION_COOKIE_SAMESITE: "lax"

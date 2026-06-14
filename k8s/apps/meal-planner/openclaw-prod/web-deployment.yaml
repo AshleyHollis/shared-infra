@@ -24,7 +24,7 @@ spec:
         - name: acr-pull-secret
       containers:
         - name: web
-          image: acrytsummprdci.azurecr.io/meal-planner-web:prod-20260614-152316-a1d923af
+          image: acrytsummprdci.azurecr.io/meal-planner-web:prod-20260614-181122-6af93718
           imagePullPolicy: Always
           ports:
             - name: http
@@ -33,17 +33,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: meal-planner-config
-          env:
-            - name: MEAL_PLANNER_BASIC_AUTH_USER
-              valueFrom:
-                secretKeyRef:
-                  name: meal-planner-runtime
-                  key: MEAL_PLANNER_BASIC_AUTH_USER
-            - name: MEAL_PLANNER_BASIC_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: meal-planner-runtime
-                  key: MEAL_PLANNER_BASIC_AUTH_PASSWORD
           resources:
             requests:
               cpu: 25m
